@@ -188,4 +188,4 @@ while i<x:
     plt.savefig("results_time"+str(i+100)+".png",dpi=300)   
     i+=1
 
-#os.system("ffmpeg -r 4/1 -start_number 100 -i results_time%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4") 
+#os.system("/usr/bin/ffmpeg -r 4/1 -start_number 100 -i results_time%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4") 
