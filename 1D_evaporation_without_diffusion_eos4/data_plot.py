@@ -186,7 +186,7 @@ while i<len(data_new):
     fig.suptitle("Time="+str(round(time_min[i],2))+" min")
     plt.rcParams.update({'font.size': 7})
     fig.tight_layout()
-    plt.savefig("results_time"+str(i+280)+".png",dpi=90)   
+    plt.savefig("results_time"+str(i+320)+".png",dpi=90)   
     i+=1
 #plt.close('all')
 #os.system("/usr/bin/ffmpeg -r 4/1 -start_number 100 -i results_time%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4") 
