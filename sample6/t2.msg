@@ -1,10 +1,10 @@
  =========================================================================
- i T O U G H 2 _ 4  R U N  date: Mon 24 Jun 04:03:47 BST 2019
+ i T O U G H 2 _ 4  R U N  date: Mon 24 Jun 17:23:11 AEST 2019
  =========================================================================
 
-Command submitted: /home/osboxes/bin/itough2 -tough2 -to sam6_0.listing sam6 4
+Command submitted: /usr/bin/itough2 -tough2 -to sam6_0.listing sam6 4
 
-cp: missing destination file operand after '/home/osboxes/it2_3462'
+cp: missing destination file operand after '/home/cmzhang/it2_7342'
 Try 'cp --help' for more information.
 Note: The following floating-point exceptions are signalling: IEEE_DENORMAL
 STOP iTOUGH2 terminated in iTOUGH2Wrapper
@@ -33,18 +33,18 @@ cp: cannot stat '*.gnu': No such file or directory
       S T A T U S   O F   i T O U G H 2   S I M U L A T I O N
  ==================================================================
 
- Date                        : 24-Jun-19  04:03
+ Date                        : 24-Jun-19  17:23
  iTOUGH2 file                : invdir
  TOUGH2 file                 : sam6
- Working directory           : /home/osboxes/local_2/tough2/tough2/sample6
- Temporary directory         : /home/osboxes/it2_3462
+ Working directory           : /home/cmzhang/tough2/tough2/sample6
+ Temporary directory         : /home/cmzhang/it2_7342
  UNIX command line arguments : -tough2 -to sam6_0.listing sam6 4
  Comment                     : First guess.                                                                   
 
  Iterations completed        :              0    Iterations to go      1
  TOUGH2 runs completed       :              1    Unsuccessful steps    0
  TOUGH2 runs to go (approx.) :              1    Log(Levenberg)        0
- CPU time used [sec]         :           1.08    for last step      1.06
+ CPU time used [sec]         :           0.54    for last step      0.54
                                         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                                         @                                             @
                                         @   @  @@@@@   @@   @  @   @@@  @  @   @@@@   @
@@ -61,12 +61,12 @@ cp: cannot stat '*.gnu': No such file or directory
                                                   ALL RIGHTS RESERVED
 
  ==================================================================================================================================
-                                          >>>>>>>>>>>>> 24-Jun-19  04:03 <<<<<<<<<<<<<
+                                          >>>>>>>>>>>>> 24-Jun-19  17:23 <<<<<<<<<<<<<
  ==================================================================================================================================
  iTOUGH2 INPUT FILE            :  invdir
  TOUGH2 INPUT FILE             :  sam6
- WORKING DIRECTORY             :  /home/osboxes/local_2/tough2/tough2/sample6
- TEMPORARY DIRECTORY           :  /home/osboxes/it2_3462
+ WORKING DIRECTORY             :  /home/cmzhang/tough2/tough2/sample6
+ TEMPORARY DIRECTORY           :  /home/cmzhang/it2_7342
  EQUATION OF STATE MODULE      :  4 --> Non-isothermal, water and air, with vapor pressure lowering
  COMPONENTS                    :  WATER     AIR       HEAT                                    
  PHASES                        :  GAS       LIQUID                        
@@ -150,17 +150,17 @@ cp: cannot stat '*.gnu': No such file or directory
  ===============
 
  Machine type                                    : Linux               
- UNIX script file name                           : /home/osboxes/bin/itough2                                                       
+ UNIX script file name                           : /usr/bin/itough2                                                                
  UNIX command line arguments                     : -tough2 -to sam6_0.listing sam6 4
- Host name                                       : osboxes
- User name                                       : osboxes
- Compilation date                                : Thu 25 Apr 05:48:14 BST 2019            
+ Host name                                       : ae429-3158
+ User name                                       : cmzhang
+ Compilation date                                : Tue 15 Jan 09:55:41 AEST 2019           
  Compiler                                        : gfortran             
  Compiler options                                : -c -O3 -fsign-zero -ffree-line-length-none                      
- Executable                                      : /home/osboxes/itough2/Executable/itough2.lnx
+ Executable                                      : /home/cmzhang/itough2/Executable/itough2.lnx
 
 
- --- End of iTOUGH2 input job:     1 lines read,    0.02 CPU-seconds used
+ --- End of iTOUGH2 input job:     1 lines read,    0.00 CPU-seconds used
 
 
  **********************************************************************************************************************************
@@ -179,7 +179,7 @@ cp: cannot stat '*.gnu': No such file or directory
  >>>>>  Forward run terminated at simulation time  8.64000000E+06 [sec] <<<<<
 
 
- ---   418th iTOUGH2 run completed on 24-Jun-19  04:03 ---  CPU time used =       1.09 sec. :)
+ ---    35th iTOUGH2 run completed on 24-Jun-19  17:23 ---  CPU time used =       0.54 sec. :)
   
 
  ---     0 error(s) and  0 warning(s) detected

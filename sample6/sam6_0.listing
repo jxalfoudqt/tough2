@@ -27,26 +27,17 @@
                           ***********  iTOUGH2 V7.1, FEBRUARY 3, 2017 FOR LINUX, S. FINSTERLE  ***********
                           ********************      THIS IS TOUGH2 RUN NO.      1     ********************
                           ********************     EQUATION OF STATE MODULE:    4     ********************
-                          ********************   TODAY'S DATE:   24-Jun-19  04:03     ********************
+                          ********************   TODAY'S DATE:   24-Jun-19  17:23     ********************
                           ********************************************************************************
 
  ===================================================================================================================================
 
- UNIX COMMAND LINE: /home/osboxes/bin/itough2 -tough2 -to sam6_0.listing sam6 4
+ UNIX COMMAND LINE: /usr/bin/itough2 -tough2 -to sam6_0.listing sam6 4
  PROBLEM TITLE    :  sam6: Ventilation experiment                                                    
 
  ===================================================================================================================================
 
  
-
- ====================================
-           MESH IS 1-D X
- ------------------------------------
- COORD.        MINIMUM        MAXIMUM
- ------------------------------------
-   X       0.87550E+00    0.67500E+01
- ====================================
-
 
  ALL NCON =    202 CONNECTIONS READ FROM FILE *MESH* REFERENCE KNOWN ELEMENTS
 
@@ -164,7 +155,7 @@
  VALUE OF INCREMENT FACTOR FOR NUMERICAL DERIVATIVES:    1.05367E-08
 
 
- END OF TOUGH2 INPUT JOB --- ELAPSED TIME =     0.036 SECONDS
+ END OF TOUGH2 INPUT JOB --- ELAPSED TIME =     0.008 SECONDS
 
  ***********************************************************************************************************************************
  *          ARRAY *MOP* ALLOWS TO GENERATE MORE PRINTOUT IN VARIOUS SUBROUTINES, AND TO MAKE SOME CALCULATIONAL CHOICES.           *
@@ -435,7 +426,7 @@
  ...ITERATING...  AT [    3, 4] --- DELTEX = 2.000000E+00   MAX. RES. = 9.196717E-07  AT ELEMENT RR  8  EQUATION   3
  RR  8(    3,4) ST =  4.0000E+00 DT =  2.0000E+00 DX1= -1.3565E+03 DX2=  7.3980E-03 T =  13.003 P =    49988. S =  2.3107E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.14 SEC;  TOTAL CPU-TIME:     0.14 SEC;  SIMULATION TIME:              4.00 SEC;  TIME STEPS:    3
+ CPU-TIME SINCE LAST OUTPUT:     0.06 SEC;  TOTAL CPU-TIME:     0.06 SEC;  SIMULATION TIME:              4.00 SEC;  TIME STEPS:    3
 
  
  sam6: Ventilation experiment                                                    
@@ -1146,7 +1137,7 @@
  ...ITERATING...  AT [    6, 4] --- DELTEX = 1.600000E+01   MAX. RES. = 8.945793E-06  AT ELEMENT RR 13  EQUATION   3
  RR 13(    6,4) ST =  3.2000E+01 DT =  1.6000E+01 DX1=  4.0546E+03 DX2=  1.2857E-02 T =  13.010 P =    53599. S =  3.0434E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.09 SEC;  TOTAL CPU-TIME:     0.23 SEC;  SIMULATION TIME:             32.00 SEC;  TIME STEPS:    6
+ CPU-TIME SINCE LAST OUTPUT:     0.04 SEC;  TOTAL CPU-TIME:     0.11 SEC;  SIMULATION TIME:             32.00 SEC;  TIME STEPS:    6
 
  
  sam6: Ventilation experiment                                                    
@@ -1858,7 +1849,7 @@
  ...ITERATING...  AT [    9, 4] --- DELTEX = 6.400000E+01   MAX. RES. = 6.272190E-06  AT ELEMENT RR 22  EQUATION   3
  RR 22(    9,4) ST =  1.6000E+02 DT =  6.4000E+01 DX1=  4.8140E+03 DX2=  1.0748E-02 T =  13.012 P =    52088. S =  3.1098E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.33 SEC;  SIMULATION TIME:            160.00 SEC;  TIME STEPS:    9
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.16 SEC;  SIMULATION TIME:            160.00 SEC;  TIME STEPS:    9
 
  
  sam6: Ventilation experiment                                                    
@@ -2570,7 +2561,7 @@
  ...ITERATING...  AT [   12, 4] --- DELTEX = 2.560000E+02   MAX. RES. = 5.538789E-06  AT ELEMENT RR 34  EQUATION   3
  RR 34(   12,4) ST =  6.7200E+02 DT =  2.5600E+02 DX1=  7.0411E+03 DX2=  1.1227E-02 T =  13.013 P =    54401. S =  3.3812E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.43 SEC;  SIMULATION TIME:            672.00 SEC;  TIME STEPS:   12
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.21 SEC;  SIMULATION TIME:            672.00 SEC;  TIME STEPS:   12
 
  
  sam6: Ventilation experiment                                                    
@@ -3282,7 +3273,7 @@
  ...ITERATING...  AT [   15, 4] --- DELTEX = 1.024000E+03   MAX. RES. = 4.923376E-06  AT ELEMENT RR 51  EQUATION   3
  RR 51(   15,4) ST =  2.7200E+03 DT =  1.0240E+03 DX1=  6.6815E+03 DX2=  1.0928E-02 T =  13.013 P =    56121. S =  3.3845E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.53 SEC;  SIMULATION TIME:           2720.00 SEC;  TIME STEPS:   15
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.26 SEC;  SIMULATION TIME:           2720.00 SEC;  TIME STEPS:   15
 
  
  sam6: Ventilation experiment                                                    
@@ -3994,7 +3985,7 @@
  ...ITERATING...  AT [   18, 4] --- DELTEX = 4.096000E+03   MAX. RES. = 4.469819E-06  AT ELEMENT RR 72  EQUATION   3
  RR 72(   18,4) ST =  1.0912E+04 DT =  4.0960E+03 DX1=  5.4335E+03 DX2=  1.0305E-02 T =  13.014 P =    59462. S =  3.2978E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.64 SEC;  SIMULATION TIME:          10912.00 SEC;  TIME STEPS:   18
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.32 SEC;  SIMULATION TIME:          10912.00 SEC;  TIME STEPS:   18
 
  
  sam6: Ventilation experiment                                                    
@@ -4706,7 +4697,7 @@
  ...ITERATING...  AT [   21, 4] --- DELTEX = 1.638400E+04   MAX. RES. = 4.075544E-06  AT ELEMENT RR 99  EQUATION   3
  RR 99(   21,4) ST =  4.3680E+04 DT =  1.6384E+04 DX1= -1.5712E+03 DX2=  7.3322E-03 T =  13.015 P =    65247. S =  2.6395E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.74 SEC;  SIMULATION TIME:          43680.00 SEC;  TIME STEPS:   21
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.37 SEC;  SIMULATION TIME:          43680.00 SEC;  TIME STEPS:   21
 
  
  sam6: Ventilation experiment                                                    
@@ -5418,7 +5409,7 @@
  ...ITERATING...  AT [   24, 5] --- DELTEX = 1.310720E+05   MAX. RES. = 6.683756E-09  AT ELEMENT RR127  EQUATION   3
  RR127(   24,5) ST =  2.7306E+05 DT =  1.3107E+05 DX1= -3.2668E+03 DX2=  8.4120E-03 T =  13.015 P =    85242. S =  2.6332E-02
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.83 SEC;  SIMULATION TIME:         273056.00 SEC;  TIME STEPS:   24
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.42 SEC;  SIMULATION TIME:         273056.00 SEC;  TIME STEPS:   24
 
  
  sam6: Ventilation experiment                                                    
@@ -6130,7 +6121,7 @@
  ...ITERATING...  AT [   27, 5] --- DELTEX = 5.242880E+05   MAX. RES. = 2.667715E-08  AT ELEMENT RR  2  EQUATION   3
  RR  2(   27,5) ST =  1.1906E+06 DT =  5.2429E+05 DX1=  1.5941E+02 DX2=  1.3164E-03 T =  13.011 P =   100387. S =  9.6399E-01
 
- CPU-TIME SINCE LAST OUTPUT:     0.10 SEC;  TOTAL CPU-TIME:     0.93 SEC;  SIMULATION TIME:        1190560.00 SEC;  TIME STEPS:   27
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.47 SEC;  SIMULATION TIME:        1190560.00 SEC;  TIME STEPS:   27
 
  
  sam6: Ventilation experiment                                                    
@@ -6841,7 +6832,7 @@
  ...ITERATING...  AT [   30, 4] --- DELTEX = 2.097152E+06   MAX. RES. = 3.189491E-07  AT ELEMENT RR  2  EQUATION   3
  RR  2(   30,4) ST =  4.8606E+06 DT =  2.0972E+06 DX1=  6.6088E+02 DX2=  9.6420E-05 T =  13.014 P =   101536. S =  9.6504E-01
 
- CPU-TIME SINCE LAST OUTPUT:     0.09 SEC;  TOTAL CPU-TIME:     1.02 SEC;  SIMULATION TIME:        4860576.00 SEC;  TIME STEPS:   30
+ CPU-TIME SINCE LAST OUTPUT:     0.05 SEC;  TOTAL CPU-TIME:     0.52 SEC;  SIMULATION TIME:        4860576.00 SEC;  TIME STEPS:   30
 
  
  sam6: Ventilation experiment                                                    
@@ -7538,7 +7529,7 @@
  ...ITERATING...  AT [   31, 4] --- DELTEX = 3.779424E+06   MAX. RES. = 1.211482E-06  AT ELEMENT RR  2  EQUATION   3
  RR  2(   31,4) ST =  8.6400E+06 DT =  3.7794E+06 DX1=  1.2086E+03 DX2= -8.6305E-05 T =  13.014 P =   102745. S =  9.6495E-01
 
- CPU-TIME SINCE LAST OUTPUT:     0.04 SEC;  TOTAL CPU-TIME:     1.06 SEC;  SIMULATION TIME:        8640000.00 SEC;  TIME STEPS:   31
+ CPU-TIME SINCE LAST OUTPUT:     0.02 SEC;  TOTAL CPU-TIME:     0.54 SEC;  SIMULATION TIME:        8640000.00 SEC;  TIME STEPS:   31
 
  
  sam6: Ventilation experiment                                                    
@@ -8231,8 +8222,8 @@
  WRITE FILE *SAVE* AFTER    31 TIME STEPS  ---  THE TIME IS 8.640000E+06 SECONDS
 
 
- ---   418th iTOUGH2 run completed on 24-Jun-19  04:03 ---  CPU time used =       1.09 sec. :)
+ ---    35th iTOUGH2 run completed on 24-Jun-19  17:23 ---  CPU time used =       0.54 sec. :)
   
  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
- END OF TOUGH2 SIMULATION JOB --- ELAPSED TIME =        1.09 SEC
+ END OF TOUGH2 SIMULATION JOB --- ELAPSED TIME =        0.54 SEC
