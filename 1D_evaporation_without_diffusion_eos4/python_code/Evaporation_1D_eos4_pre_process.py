@@ -28,12 +28,12 @@ dat.title = '1D_evaporation_without_diffusion_eos4'
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
     {'max_timesteps': 3.e3,
-     'tstop': 3.e6,
+     'tstop': 3.e8,
      'const_timestep': 100.,
      'gravity': 9.81,
      'print_level': 2,
      'default_incons': [101.3e3, 10.9999, 20.0, None]})
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/10
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/50
 dat.parameter['max_timestep']=dat.parameter['const_timestep']*10
 dat.start = True
 
