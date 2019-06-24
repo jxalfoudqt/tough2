@@ -1,0 +1,4 @@
+#! /bin/sh
+ tough2 -to sam6_0.out sam6 4
+itough2 sam6i sam6 4
+
