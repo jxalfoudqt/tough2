@@ -60,10 +60,9 @@ while i<lst.num_times:
     # Gas_flow_raw               = lst.connection['FLO(GAS)']/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
     # Gas_flow                   = np.insert(Gas_flow_raw,0, Gas_flow_raw[-1])
 
-  
     fig=plt.figure()
     ax1=plt.subplot(242)
-    ax1.plot(Gas_Pressure[:,i]/Pa2Kpa, element_value,'b-')
+    ax1.plot(Gas_Pressure[:,i]/Pa2Kpa, element_value,'b1-')
     plt.xlabel('Gas. Pre. (Kpa)')
     #ax1.spines['top'].set_color('red')
     plt.ylim(7,1.5)
@@ -72,7 +71,7 @@ while i<lst.num_times:
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
     #ax1.set_yscale('log')
     ax2=ax1.twiny()
-    ax2.plot(Capillary_Pressure[:,i]/Pa2Kpa,element_value,'r-')
+    ax2.plot(Capillary_Pressure[:,i]/Pa2Kpa,element_value,'r1-')
     plt.xlabel('Cap. pre. (Kpa)')
     # plt.ylabel('high (m)')
     plt.ylim(7,1.5)
@@ -85,7 +84,7 @@ while i<lst.num_times:
     ax2.tick_params(axis='x', colors='red')	 
     
     ax11=plt.subplot(241)
-    ax11.plot(Liq_saturation[:,i]*100,element_value,'b-')
+    ax11.plot(Liq_saturation[:,i]*100,element_value,'b1-')
     plt.ylabel('x (m)')
     plt.xlabel('Liq. sat. (%)')
     # plt.ylabel('high (m)')
@@ -94,7 +93,7 @@ while i<lst.num_times:
     #ax11.set_yscale('log')   
 	
     ax13=plt.subplot(244)
-    ax13.plot(Temperature[:,i],element_value,'b-')
+    ax13.plot(Temperature[:,i],element_value,'b1-')
     plt.xlabel('Tem. (Degree)')
     # plt.ylabel('high (m)')
     plt.ylim(7,1.5)
@@ -104,7 +103,7 @@ while i<lst.num_times:
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
 	
     ax3=plt.subplot(243)
-    ax3.plot(Gas_flow_raw[:,i],connection_value,'b-')
+    ax3.plot(Gas_flow_raw[:,i],connection_value,'b1-')
     plt.xlabel('Gas Dar. vel. (mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(7,1.5)
@@ -113,7 +112,7 @@ while i<lst.num_times:
     #ax3.set_yscale('log')
     plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))	
     ax4=ax3.twiny()	
-    ax4.plot(Liquid_flow_raw[:,i],connection_value,'r-')
+    ax4.plot(Liquid_flow_raw[:,i],connection_value,'r1-')
     plt.xlabel('Liq. Dar. vel. (mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(7,1.5)
@@ -126,7 +125,7 @@ while i<lst.num_times:
     plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
 	
     ax5=plt.subplot(413)
-    ax5.plot(lst.times[:i+1],Gas_mass[:i+1],'k-')
+    ax5.plot(lst.times[:i+1],Gas_mass[:i+1],'k1-')
     plt.ylabel('Gas. mass (kg)')
     #plt.xlabel('Time (s)')
     plt.ylim(0,5.e-2)
@@ -136,7 +135,7 @@ while i<lst.num_times:
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0),useLocale=0)
     #ax1.spines['left'].set_color('blue')
     ax6 = ax5.twinx() 
-    ax6.plot(lst.times[:i+1],liquid_mass[:i+1],'r-',)
+    ax6.plot(lst.times[:i+1],liquid_mass[:i+1],'r1-',)
     plt.ylim(1300,1340)
     #plt.ylim(np.min(liquid_mass),np.max(liquid_mass))
     plt.xlim(0,np.max(lst.times))
@@ -148,7 +147,7 @@ while i<lst.num_times:
     #ax6.tick_params(axis='y', colors='red')	 	
 	
     ax7=plt.subplot(414)
-    ax7.plot(lst.times[:i+1],Gas_flow_topsoil[:i+1],'k-')
+    ax7.plot(lst.times[:i+1],Gas_flow_topsoil[:i+1],'k1-')
     plt.ylabel('Gas Dar. vel. (mm/day)')
     plt.xlabel('Time (s)')
     plt.ylim(-1.1e-1,0.1e-1)
@@ -157,7 +156,7 @@ while i<lst.num_times:
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
     ax7.set_xscale('log')
     ax8 = ax7.twinx() 
-    ax8.plot(lst.times[:i+1],Liquid_flow_topsoil[:i+1],'r-',)
+    ax8.plot(lst.times[:i+1],Liquid_flow_topsoil[:i+1],'r1-',)
     plt.ylim(-1.e1,1.1e2)
     #plt.ylim(np.min(Liquid_flow_topsoil),np.max(Liquid_flow_topsoil))
     plt.xlim(0,np.max(lst.times))
@@ -172,7 +171,7 @@ while i<lst.num_times:
     fig.suptitle('time: %6.2e s' %lst.times[i])
     plt.rcParams.update({'font.size': 7})
     #fig.tight_layout()
-    plt.savefig('output_'+str(i+101)+'.png',dpi=300) 
+    plt.savefig('figure/output_'+str(i+101)+'.png',dpi=300) 
     i+=1
 
 #plt.close('all')
