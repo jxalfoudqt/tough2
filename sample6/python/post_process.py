@@ -7,38 +7,36 @@ import os
 from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
-liq_density_kgPm3=1000
-water_molecular_weight=0.018
-R_value=8.314
-m2mm=1000
-day2s=3600*24
-T_kelven=273.15
-Pa2Kpa=1000
+# liq_density_kgPm3=1000
+# water_molecular_weight=0.018
+# R_value=8.314
+# m2mm=1000
+# day2s=3600*24
+# T_kelven=273.15
+# Pa2Kpa=1000
 
-# --- post-process the output ---------------------------
-lst = t2listing('sam6_0.listing')
-dat=t2data('sam6')
+# # --- post-process the output ---------------------------
+# lst = t2listing('sam6_0.listing')
+# dat=t2data('sam6')
 
-element_coordinate         = np.array([j.centre for j in dat.grid.blocklist])
-connection_first_distance  = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
-connection_second_distance = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
-element_location_raw       = connection_first_distance+connection_second_distance
-element_location_new       = np.insert(element_location_raw, 0, element_coordinate[1,0]-element_location_raw[0])
-element_value              = np.cumsum(element_location_new)    
-connection_location_raw    = connection_first_distance[1:]+connection_second_distance[:-1]
-connection_location_new    = np.insert(connection_location_raw, 0, element_coordinate[1,0]-connection_second_distance[0])
-connection_value           = np.cumsum(connection_location_new) 
-element_volume             = np.array([blk.volume for blk in dat.grid.blocklist[1:-1]])
+# connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
+# connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
+# element_value                = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
+# connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
+# element_volume               = np.array([blk.volume for blk in dat.grid.blocklist[1:-1]])
 
-Gas_Density                = np.array([lst.history(('e',lst.element.row_name[i],'DG'))[1] for i in range(lst.element.num_rows)])
-Liq_Density                = np.array([lst.history(('e',lst.element.row_name[i],'DL'))[1] for i in range(lst.element.num_rows)])
-Gas_saturation             = np.array([lst.history(('e',lst.element.row_name[i],'SG'))[1] for i in range(lst.element.num_rows)])
-Liq_saturation             = np.array([lst.history(('e',lst.element.row_name[i],'SL'))[1] for i in range(lst.element.num_rows)])
-Gas_Pressure               = np.array([lst.history(('e',lst.element.row_name[i],'P'))[1] for i in range(lst.element.num_rows)])
-Capillary_Pressure         = np.array([lst.history(('e',lst.element.row_name[i],'PCAP'))[1] for i in range(lst.element.num_rows)])
-Temperature                = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
-Liquid_flow_raw            = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
-Gas_flow_raw               = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(GAS)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
+# Gas_Density                = np.array([lst.history(('e',lst.element.row_name[i],'DG'))[1] for i in range(lst.element.num_rows)])
+# Liq_Density                = np.array([lst.history(('e',lst.element.row_name[i],'DL'))[1] for i in range(lst.element.num_rows)])
+# Gas_saturation             = np.array([lst.history(('e',lst.element.row_name[i],'SG'))[1] for i in range(lst.element.num_rows)])
+# Liq_saturation             = np.array([lst.history(('e',lst.element.row_name[i],'SL'))[1] for i in range(lst.element.num_rows)])
+# Gas_Pressure               = np.array([lst.history(('e',lst.element.row_name[i],'P'))[1] for i in range(lst.element.num_rows)])
+# Capillary_Pressure         = np.array([lst.history(('e',lst.element.row_name[i],'PCAP'))[1] for i in range(lst.element.num_rows)])
+# Temperature                = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
+# Liquid_flow_raw            = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
+# Gas_flow_raw               = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(GAS)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
+# Gas_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(GAS)'))[1] for i in range(lst.primary.num_rows)])
+# Liq_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
+
 Liquid_flow_topsoil        = Liquid_flow_raw[0]
 Gas_flow_topsoil           = Gas_flow_raw[0]
 
@@ -65,7 +63,7 @@ while i<lst.num_times:
     ax1.plot(Gas_Pressure[:,i]/Pa2Kpa, element_value,'b1-')
     plt.xlabel('Gas. Pre. (Kpa)')
     #ax1.spines['top'].set_color('red')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(50,400)
     #plt.xlim(np.min(Gas_Pressure/Pa2Kpa),np.max(Gas_Pressure/Pa2Kpa))
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
@@ -74,7 +72,7 @@ while i<lst.num_times:
     ax2.plot(Capillary_Pressure[:,i]/Pa2Kpa,element_value,'r1-')
     plt.xlabel('Cap. pre. (Kpa)')
     # plt.ylabel('high (m)')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(-5.e4,1.e3)
     #plt.xlim(np.min(Capillary_Pressure/Pa2Kpa),np.max(Capillary_Pressure/Pa2Kpa))
     #ax2.set_yscale('log')
@@ -88,25 +86,49 @@ while i<lst.num_times:
     plt.ylabel('x (m)')
     plt.xlabel('Liq. sat. (%)')
     # plt.ylabel('high (m)')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(-5,105)
     #ax11.set_yscale('log')   
-	
-    ax13=plt.subplot(244)
-    ax13.plot(Temperature[:,i],element_value,'b1-')
+    ax13=ax11.twiny()	
+    ax13.plot(Temperature[:,i],element_value,'r1-')
     plt.xlabel('Tem. (Degree)')
     # plt.ylabel('high (m)')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(12.95,13.05)
     #plt.xlim(np.min(Temperature),np.max(Temperature))
     #ax13.set_yscale('log')
-    #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax13.spines['top'].set_color('red')
+    ax13.xaxis.label.set_color('red')
+    ax13.tick_params(axis='x', colors='red')
 	
+    ax9=plt.subplot(244)
+    ax9.plot(Gas_permeability[:,i],element_value,'b1-')
+    plt.ylabel('x (m)')
+    plt.xlabel('Gas. Rel. K')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-5,105)
+    plt.xlim(np.min(Gas_permeability),np.max(Gas_permeability))
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax10=ax9.twiny()	
+    ax10.plot(Liq_permeability[:,i],element_value,'r1-')
+    plt.xlabel('Liq. Rel. K')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(12.95,13.05)
+    plt.xlim(np.min(Liq_permeability),np.max(Liq_permeability))
+    #ax13.set_yscale('log')
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax10.spines['top'].set_color('red')
+    ax10.xaxis.label.set_color('red')
+    ax10.tick_params(axis='x', colors='red')
+
     ax3=plt.subplot(243)
     ax3.plot(Gas_flow_raw[:,i],connection_value,'b1-')
     plt.xlabel('Gas Dar. vel. (mm/day)')
     # plt.ylabel('high (m)')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(-1.2e-1,1.e-2)
     #plt.xlim(np.min(Gas_flow_raw),np.max(Gas_flow_raw))
     #ax3.set_yscale('log')
@@ -115,11 +137,11 @@ while i<lst.num_times:
     ax4.plot(Liquid_flow_raw[:,i],connection_value,'r1-')
     plt.xlabel('Liq. Dar. vel. (mm/day)')
     # plt.ylabel('high (m)')
-    plt.ylim(7,1.5)
+    plt.ylim(5.5,-0.5)
     plt.xlim(-5.,1.1e2)
     #plt.xlim(np.nanmin(Liquid_flow_raw),np.nanmax(Liquid_flow_raw))	
     plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-    ax4.spines['top'].set_color('red')	
+    ax4.spines['right'].set_color('red')	
     ax4.xaxis.label.set_color('red')
     ax4.tick_params(axis='x', colors='red')	 	
     plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
@@ -144,7 +166,7 @@ while i<lst.num_times:
     ax6.set_xscale('log')
     ax6.spines['right'].set_color('red')
     ax6.yaxis.label.set_color('red')
-    #ax6.tick_params(axis='y', colors='red')	 	
+    ax6.tick_params(axis='y', colors='red')	 	
 	
     ax7=plt.subplot(414)
     ax7.plot(lst.times[:i+1],Gas_flow_topsoil[:i+1],'k1-')

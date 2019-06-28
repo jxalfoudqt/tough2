@@ -22,36 +22,21 @@ dat = t2data('sam6')
 # #--- plot generated mesh ------------------------------------	
     
 element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
+
 connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
 connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
-element_location_raw         = connection_first_distance+connection_second_distance
-element_location_new         = np.insert(element_location_raw, 0, 1.75)
-element_location             = np.cumsum(element_location_new)
-connection_location_raw      = connection_first_distance[1:]+connection_second_distance[:-1]
-connection_location_new      = np.insert(connection_location_raw, 0, element_coordinate[1,0]-connection_second_distance[0])
-connection_value             = np.cumsum(connection_location_new) 
+element_value             = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
+connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
 
-element_volume               = np.array([blk.volume for blk in dat.grid.blocklist[:-1]])
-element_area                 = np.array([blk.area for blk in dat.grid.connectionlist])
-calculated_area              = 2*np.pi*connection_value*(-2)*element_coordinate[0,2]
-calculated_colume_raw        = np.pi*connection_value**2*(-2)*element_coordinate[0,2]
-calculated_colume            = np.diff(np.insert(calculated_colume_raw, 0, 0))
-
-element_area_relative_error  =(calculated_area-element_area)/element_area
-element_volume_relative_error=(calculated_colume-element_volume)/element_volume
-print np.max(element_area_relative_error)
-print np.max(element_volume_relative_error)
-
-
-# geo = mulgrid().rectangular(element_coordinate[:,0],  -2*np.array([element_coordinate[0,1]]), -2*np.array([element_coordinate[0,2]]))
+# geo = mulgrid().rectangular(element_coordinate[:,0], -2*np.array([element_coordinate[0,1]]), -2*np.array([element_coordinate[0,2]]))
 # geo.write_vtk('geom.vtk')
 
 
 # fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
-# ax.scatter(element_location[:,0], element_location[:,1], element_location[:,2], s=30, c='r', marker='.')
-# ax.scatter(element_location[0,0], element_location[0,1], element_location[0,2], s=10, c='b', marker='.')
-# #ax.scatter(element_location[-1,0], element_location[-1,1], element_location[-1,2], s=10, c='b', marker='^')
+# ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=30, c='r', marker='.')
+# ax.scatter(element_coordinate[0,0], element_coordinate[0,1], element_coordinate[0,2], s=10, c='b', marker='.')
+# #ax.scatter(element_coordinate[-1,0], element_coordinate[-1,1], element_coordinate[-1,2], s=10, c='b', marker='^')
 # ax.set_xlabel('X Label')
 # ax.set_ylabel('Y Label')
 # ax.set_zlabel('Z Label')
@@ -66,7 +51,7 @@ print np.max(element_volume_relative_error)
 
 # fig=plt.figure()
 # ax1=plt.subplot(141)
-# ax1.plot(initial_porosity[:],element_location,'b-')
+# ax1.plot(initial_porosity[:],element_value,'b-')
 # plt.xlabel('Por.')
 # plt.ylabel('x (m)')
 # # plt.ylabel('high (m)')
@@ -75,7 +60,7 @@ print np.max(element_volume_relative_error)
 # #ax1.set_yscale('log')
 
 # ax2=plt.subplot(142)
-# ax2.plot(initial_condition[:,0]/1000,element_location,'b-')
+# ax2.plot(initial_condition[:,0]/1000,element_value,'b-')
 # plt.xlabel('Gas Pre. (Kpa)')
 # # plt.ylabel('high (m)')
 # plt.ylim(7,1.5)
@@ -83,7 +68,7 @@ print np.max(element_volume_relative_error)
 # #plt.yscale('log')
 
 # ax3=plt.subplot(143)
-# ax3.plot(100-initial_condition[1:,1]*100,element_location[1:],'b-')
+# ax3.plot(100-initial_condition[1:,1]*100,element_value[1:],'b-')
 # plt.xlabel('Liq. Sat. (%)')
 # # plt.ylabel('high (m)')
 # plt.ylim(7,1.5)
@@ -92,7 +77,7 @@ print np.max(element_volume_relative_error)
 # #ax3.set_yscale('log')
 
 # ax4=plt.subplot(144)
-# ax4.plot(initial_condition[:,2]/1000,element_location,'b-')
+# ax4.plot(initial_condition[:,2]/1000,element_value,'b-')
 # plt.xlabel('Air Pre. (%)')
 # # plt.ylabel('high (m)')
 # plt.ylim(7,1.5)
