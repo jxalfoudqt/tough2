@@ -32,23 +32,34 @@ from mpl_toolkits.mplot3d import Axes3D
 # Gas_Pressure               = np.array([lst.history(('e',lst.element.row_name[i],'P'))[1] for i in range(lst.element.num_rows)])
 # Capillary_Pressure         = np.array([lst.history(('e',lst.element.row_name[i],'PCAP'))[1] for i in range(lst.element.num_rows)])
 # Temperature                = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
+
 # Liquid_flow_raw            = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
 # Gas_flow_raw               = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(GAS)'))[1] for i in range(lst.connection.num_rows)])/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
+
 # Gas_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(GAS)'))[1] for i in range(lst.primary.num_rows)])
 # Liq_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
+# GAS_H                      = np.array([lst.history(('p',lst.primary.row_name[i],'H(GAS)'))[1] for i in range(lst.primary.num_rows)])
+# Liq_H                      = np.array([lst.history(('p',lst.primary.row_name[i],'H(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
+# First_thermodynamic_change = np.array([lst.history(('p',lst.primary.row_name[i],'DX1'))[1] for i in range(lst.primary.num_rows)])
+# Second_thermodynamic_change= np.array([lst.history(('p',lst.primary.row_name[i],'DX2'))[1] for i in range(lst.primary.num_rows)])
+# Third_thermodynamic_change = np.array([lst.history(('p',lst.primary.row_name[i],'DX3'))[1] for i in range(lst.primary.num_rows)])
+# First_thermodynamic_var    = np.array([lst.history(('p',lst.primary.row_name[i],'X1'))[1] for i in range(lst.primary.num_rows)])
+# Second_thermodynamic_var   = np.array([lst.history(('p',lst.primary.row_name[i],'X2'))[1] for i in range(lst.primary.num_rows)])
+# Third_thermodynamic_var    = np.array([lst.history(('p',lst.primary.row_name[i],'X3'))[1] for i in range(lst.primary.num_rows)])
 
-Liquid_flow_topsoil        = Liquid_flow_raw[0]
-Gas_flow_topsoil           = Gas_flow_raw[0]
 
-Gas_mass=np.empty(lst.num_times)
-Gas_mass[:]=np.nan   
-liquid_mass=np.empty(lst.num_times)
-liquid_mass[:]=np.nan
-i=0
-while i<lst.num_times:
-    Gas_mass[i]     = np.sum(element_volume*Gas_Density[1:-1,i]*Gas_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity,axis=0)
-    liquid_mass[i]  = np.sum(element_volume*Liq_Density[1:-1,i]*Liq_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity,axis=0)
-    i+=1
+# Liquid_flow_topsoil        = Liquid_flow_raw[0]
+# Gas_flow_topsoil           = Gas_flow_raw[0]
+
+# Gas_mass=np.empty(lst.num_times)
+# Gas_mass[:]=np.nan   
+# liquid_mass=np.empty(lst.num_times)
+# liquid_mass[:]=np.nan
+# i=0
+# while i<lst.num_times:
+    # Gas_mass[i]     = np.sum(element_volume*Gas_Density[1:-1,i]*Gas_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity,axis=0)
+    # liquid_mass[i]  = np.sum(element_volume*Liq_Density[1:-1,i]*Liq_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity,axis=0)
+    # i+=1
 
 i=0
 while i<lst.num_times:
@@ -59,7 +70,7 @@ while i<lst.num_times:
     # Gas_flow                   = np.insert(Gas_flow_raw,0, Gas_flow_raw[-1])
 
     fig=plt.figure()
-    ax1=plt.subplot(242)
+    ax1=plt.subplot(342)
     ax1.plot(Gas_Pressure[:,i]/Pa2Kpa, element_value,'b1-')
     plt.xlabel('Gas. Pre. (Kpa)')
     #ax1.spines['top'].set_color('red')
@@ -81,7 +92,7 @@ while i<lst.num_times:
     ax2.xaxis.label.set_color('red')
     ax2.tick_params(axis='x', colors='red')	 
     
-    ax11=plt.subplot(241)
+    ax11=plt.subplot(341)
     ax11.plot(Liq_saturation[:,i]*100,element_value,'b1-')
     plt.ylabel('x (m)')
     plt.xlabel('Liq. sat. (%)')
@@ -102,9 +113,9 @@ while i<lst.num_times:
     ax13.xaxis.label.set_color('red')
     ax13.tick_params(axis='x', colors='red')
 	
-    ax9=plt.subplot(244)
+    ax9=plt.subplot(344)
     ax9.plot(Gas_permeability[:,i],element_value,'b1-')
-    plt.ylabel('x (m)')
+    #plt.ylabel('x (m)')
     plt.xlabel('Gas. Rel. K')
     # plt.ylabel('high (m)')
     plt.ylim(5.5,-0.5)
@@ -124,7 +135,7 @@ while i<lst.num_times:
     ax10.xaxis.label.set_color('red')
     ax10.tick_params(axis='x', colors='red')
 
-    ax3=plt.subplot(243)
+    ax3=plt.subplot(343)
     ax3.plot(Gas_flow_raw[:,i],connection_value,'b1-')
     plt.xlabel('Gas Dar. vel. (mm/day)')
     # plt.ylabel('high (m)')
@@ -145,8 +156,96 @@ while i<lst.num_times:
     ax4.xaxis.label.set_color('red')
     ax4.tick_params(axis='x', colors='red')	 	
     plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
+
+    ax1=plt.subplot(345)
+    ax1.plot(First_thermodynamic_var[:,i], element_value,'b1-')
+    plt.xlabel('Fir. Var.')
+    #ax1.spines['top'].set_color('red')
+    plt.ylabel('x (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(50,400)
+    plt.xlim(np.min(First_thermodynamic_var),np.max(First_thermodynamic_var))
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    #ax1.set_yscale('log')
+    ax2=ax1.twiny()
+    ax2.plot(First_thermodynamic_change[:,i],element_value,'r1-')
+    plt.xlabel('Fst. Cha.')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-5.e4,1.e3)
+    plt.xlim(np.min(First_thermodynamic_change),np.max(First_thermodynamic_change))
+    #ax2.set_yscale('log')
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    ax2.spines['top'].set_color('red')
+    ax2.xaxis.label.set_color('red')
+    ax2.tick_params(axis='x', colors='red')	 
+    
+    ax11=plt.subplot(346)
+    ax11.plot(Second_thermodynamic_var[:,i],element_value,'b1-')
+    plt.xlabel('Sec. Var.')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-5,105)
+    plt.xlim(np.min(Second_thermodynamic_var),np.max(Second_thermodynamic_var))
+    #ax11.set_yscale('log')   
+    ax13=ax11.twiny()	
+    ax13.plot(Second_thermodynamic_change[:,i],element_value,'r1-')
+    plt.xlabel('Sec. Cha.')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(12.95,13.05)
+    plt.xlim(np.min(Second_thermodynamic_change),np.max(Second_thermodynamic_change))
+    #ax13.set_yscale('log')
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax13.spines['top'].set_color('red')
+    ax13.xaxis.label.set_color('red')
+    ax13.tick_params(axis='x', colors='red')
 	
-    ax5=plt.subplot(413)
+    ax9=plt.subplot(347)
+    ax9.plot(Third_thermodynamic_var[:,i],element_value,'b1-')
+    #plt.ylabel('x (m)')
+    plt.xlabel('Thi. Var.')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-5,105)
+    plt.xlim(np.min(Third_thermodynamic_var),np.max(Third_thermodynamic_var))
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax10=ax9.twiny()	
+    ax10.plot(Third_thermodynamic_change[:,i],element_value,'r1-')
+    plt.xlabel('Thi. Cha.')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(12.95,13.05)
+    plt.xlim(np.min(Third_thermodynamic_change),np.max(Third_thermodynamic_change))
+    #ax13.set_yscale('log')
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
+    ax10.spines['top'].set_color('red')
+    ax10.xaxis.label.set_color('red')
+    ax10.tick_params(axis='x', colors='red')
+
+    ax3=plt.subplot(348)
+    ax3.plot(GAS_H[:,i],element_value,'b1-')
+    plt.xlabel('Gas H')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-1.2e-1,1.e-2)
+    plt.xlim(np.min(GAS_H),np.max(GAS_H))
+    #ax3.set_yscale('log')
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))	
+    ax4=ax3.twiny()	
+    ax4.plot(Liq_H[:,i],element_value,'r1-')
+    plt.xlabel('Liq. H')
+    # plt.ylabel('high (m)')
+    plt.ylim(5.5,-0.5)
+    #plt.xlim(-5.,1.1e2)
+    plt.xlim(np.nanmin(Liq_H),np.nanmax(Liq_H))	
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    ax4.spines['right'].set_color('red')	
+    ax4.xaxis.label.set_color('red')
+    ax4.tick_params(axis='x', colors='red')	 	
+    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
+	
+    ax5=plt.subplot(615)
     ax5.plot(lst.times[:i+1],Gas_mass[:i+1],'k1-')
     plt.ylabel('Gas. mass (kg)')
     #plt.xlabel('Time (s)')
@@ -168,7 +267,7 @@ while i<lst.num_times:
     ax6.yaxis.label.set_color('red')
     ax6.tick_params(axis='y', colors='red')	 	
 	
-    ax7=plt.subplot(414)
+    ax7=plt.subplot(616)
     ax7.plot(lst.times[:i+1],Gas_flow_topsoil[:i+1],'k1-')
     plt.ylabel('Gas Dar. vel. (mm/day)')
     plt.xlabel('Time (s)')
