@@ -1,0 +1,191 @@
+--------------------------------------------------------------------------------
+                           iTOUGH2 SAMPLE PROBLEM
+--------------------------------------------------------------------------------
+Problem             : 6
+Part                : -
+Direct problem      : sam6
+Inverse problem     : sam6i
+Other input files   : pcap.dat
+EOS module          : 4
+Description         : Estimate permeability, air entry pressure, and
+                      pore size distribution index of van Genuchten's model
+                      based on matrix potential and gas pressure 
+                      measurements obtained during a ventilation experiment
+Execution           : itough2 sam6i sam6 4 &
+Special instructions: -
+--------------------------------------------------------------------------------
+
+> PARAMETER
+ 
+  >> Try different GUESSes as starting points for the optimization
+  1 -17.0  = log(k)
+  2   3.0  = van Genuchten parameter n
+  3   6.0  = log(1/alpha)
+) Delete this line to invoke third starting point
+  1 -18.0
+  2   2.0
+  3   5.7
+) Delete this line to invoke third starting point
+  1 -19.0
+  2   2.5
+  3   6.3
+) Delete this line to invoke fourth starting point
+  1 -20.0
+  2   5.0
+  3   6.2
+) Delete this line to invoke fifth starting point
+  1 -21.0
+  2   4.0
+  3   6.4
+
+  >> ABSOLUTE PERMEABILITY
+     >>> MATERIAL       : MATRI
+         >>>> ANNOTATION: Permeability
+         >>>> LOGARITHM
+         >>>> RANGE     : -22.0 -15.0
+         >>>> WEIGHT    : 0.0
+         <<<<
+     <<<
+
+
+  >> CAPILLARY PRESSURE FUNCTION
+     >>> MATERIAL       : MATRI
+         >>>> ANNOTATION: vG n
+         >>>> INDEX     : 1
+         >>>> RANGE     : 1.0  6.0
+         >>>> VALUE
+         >>>> WEIGHT    : 0.0
+         <<<<
+     >>> MATERIAL       : MATRI
+         >>>> ANNOTATION: vG 1/alpha
+         >>>> INDEX     : 2 (Pe)
+         >>>> LOGARITHM
+         >>>> VALUE
+         >>>> WEIGHT    : 0.0
+         <<<<
+     <<<
+
+  <<
+
+> MEASUREMENTS
+
+  >> TIMES: 2 [DAYS]
+     1.0 2.0
+  >> TIMES: 25 LOGARITHMICALLY SPACED [DAY]
+     3.0 80.0
+
+
+  >> CAPILLARY PRESSURE
+     >>> ELEMENT: RR_19  (TP1.2, 2 cm)
+         >>>> FACTOR  : 1.E5    
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 2
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+
+     >>> ELEMENT: RR_39  (TP1.5, 5 cm)
+         >>>> FACTOR  : 1.E5
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 3
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+
+     >>> ELEMENT: RR_53  (TP1.10, 10 cm)
+         >>>> FACTOR  : 1.E5
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 4
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+
+     >>> ELEMENT: RR_76  (20 cm)
+         >>>> FACTOR  : 1.E5
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 5
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+
+     >>> ELEMENT: RR1_1  (40 cm)
+         >>>> FACTOR  : 1.E5
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 6
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+
+     >>> ELEMENT: RR128  (80 cm)
+         >>>> FACTOR  : 1.E5
+         >>>> HEADER  : 2
+         >>>> COLUMN  : 1 7
+         >>>> DATA [DAYS] FILE: pcap.dat
+         >>>> RELATIVE ERROR: 10 %
+         <<<<
+     <<<
+
+  >> GAS PRESSURE [NTB 91-34, Figure 12]
+     >>> ELEMENT: RR160 BOSB 84.011
+         >>>> FACTOR  : 1.E6
+         >>>> DATA [DAYS]
+              0.0  0.12
+             80.0  0.12
+         >>>> STANDARD DEVIATION: 0.01 = SQRT(0.25*0.02^2)
+         >>>> WINDOW: 79.9  80.1 [DAYS]
+         <<<<
+
+     >>> ELEMENT: RR188  BOSB 84.018
+         >>>> FACTOR  : 1.E6
+         >>>> DATA [DAYS]
+              0.0  0.28
+             80.0  0.28
+         >>>> STANDARD DEVIATION: 0.01 = SQRT(0.25*0.02^2)
+         >>>> WINDOW: 79.9  80.1 [DAYS]
+         <<<<
+     <<<
+
+  >> CHANGE of TOTAL MASS of WATER
+     >>> entire MODEL (i.e., DRIFT only because of negative rock grain specific heat)
+         >>>> ANNOTATION        : &   (continue on next line to avoid ambiguous commands)
+                                  Average evaporation rate
+         >>>> REFERENCE         : 0.74687E-01 (this is the initial amount of vapor in drift)
+         >>>> FACTOR            : 76.  microliter/s/m^2 -- kg/(m tunnel)/(80 days)
+         >>>> DATA [DAYS]
+              80.0 0.3
+         >>>> WINDOW            : 79.9  80.1 [DAYS]
+         >>>> VARIANCE          : 1.0E-4  = 0.04*2.5E-3
+         <<<<
+     <<<
+
+  <<
+
+> COMPUTATION
+
+  >> STOPPING criteria
+     >>> number of ITERATIONS     : 6
+     >>> maximum scaled STEP size : 0.5 (based on CURRENT parameter value)
+     >>> ignore WARNING messages
+#    >>> forward
+     <<<
+    
+  >> JACOBIAN matrix
+     >>> PERTURB parameters by                    : 1 %
+     >>> use FORWARD finite differences for first : 5 iterations
+         then switch to centered finite difference quotient
+     <<<
+
+  >> ERROR analysis
+     >>> risk ALPHA is                 :  5 %
+     >>> check LINEARITY assumption on : 95 % confidence level
+     <<<
+
+  >> OUTPUT
+     >>> time units for output is DAYS
+     >>> write plot file with CHARACTERISTIC curves
+     >>> print COPYRIGHT statement
+     <<<
+  <<
+<
+
+

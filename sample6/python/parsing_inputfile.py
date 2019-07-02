@@ -89,33 +89,35 @@ connection_value             = np.cumsum(connection_first_distance+np.insert(con
 # # fig.tight_layout()
 # plt.savefig('figure/output_100.png',dpi=300) 
 
+capillarity_parameter=dat.grid.rocktype[str(i)].capillarity['parameters']
 
-# dat.grid.rocktype.pop('dfalt', None)
-# saturation=np.linspace(0,1,100)
-# capillary_pressure=np.empty(len(saturation))
-# capillary_pressure[:]=np.nan
-# # #--- plot SWCC and Cap. Pre. ------------------------------------	
-# for i in dat.grid.rocktype:
-    # capillarity_parameter=dat.grid.rocktype[str(i)].capillarity['parameters']
-    # capillarity_type=dat.grid.rocktype[str(i)].capillarity['type']
-    # relative_permeability_parameter=dat.grid.rocktype[str(i)].relative_permeability['parameters']
-    # relative_permeability_type=dat.grid.rocktype[str(i)].relative_permeability['type']
-    
-    # fig=plt.figure()
-    # ax3=plt.subplot(211)
-    # if  capillarity_type==1:
-        # capillary_pressure=-1*capillarity_parameter[0]*(capillarity_parameter[2]-saturation)/(capillarity_parameter[2]-capillarity_parameter[1])
-        # capillary_pressure[saturation<=capillarity_parameter[1]]=-1*capillarity_parameter[0]
-        # capillary_pressure[saturation>=capillarity_parameter[2]]=0
 
-    # if  capillarity_type==7:
-        # lamda=capillarity_parameter[0]
-        # liquid_residual_saturation=capillarity_parameter[1]
-        # P_zero=1./capillarity_parameter[2]	
-        # Pressure_max=capillarity_parameter[3]		
-        # saturated_liquid_saturation=capillarity_parameter[4]
-        # S_star=(saturation-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
-        # capillary_pressure=1*P_zero*(S_star**(-1/lamda)-1)**(1-lamda)
+dat.grid.rocktype.pop('dfalt', None)
+saturation=np.linspace(0,1,100)
+capillary_pressure=np.empty(len(saturation))
+capillary_pressure[:]=np.nan
+# #--- plot SWCC and Cap. Pre. ------------------------------------	
+for i in dat.grid.rocktype:
+    capillarity_parameter=dat.grid.rocktype[str(i)].capillarity['parameters']
+    capillarity_type=dat.grid.rocktype[str(i)].capillarity['type']
+    relative_permeability_parameter=dat.grid.rocktype[str(i)].relative_permeability['parameters']
+    relative_permeability_type=dat.grid.rocktype[str(i)].relative_permeability['type']
+   
+     fig=plt.figure()
+     ax3=plt.subplot(211)
+     if  capillarity_type==1:
+        capillary_pressure=-1*capillarity_parameter[0]*(capillarity_parameter[2]-saturation)/(capillarity_parameter[2]-capillarity_parameter[1])
+        capillary_pressure[saturation<=capillarity_parameter[1]]=-1*capillarity_parameter[0]
+        capillary_pressure[saturation>=capillarity_parameter[2]]=0
+
+     if  capillarity_type==7:
+         lamda=capillarity_parameter[0]
+         liquid_residual_saturation=capillarity_parameter[1]
+         P_zero=1./capillarity_parameter[2]	
+         Pressure_max=capillarity_parameter[3]		
+         saturated_liquid_saturation=capillarity_parameter[4]
+         S_star=(saturation-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
+         capillary_pressure=1*P_zero*(S_star**(-1/lamda)-1)**(1-lamda)
 
 		
     # ax3.plot(saturation,capillary_pressure,'k-o',)
