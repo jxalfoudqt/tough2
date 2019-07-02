@@ -1,4 +1,4 @@
-
+i=1
 
 while i<lst.num_times:
 
