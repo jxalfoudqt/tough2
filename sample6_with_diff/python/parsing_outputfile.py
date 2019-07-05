@@ -33,7 +33,7 @@ Gas_Pressure                 = np.array([lst.history(('e',lst.element.row_name[i
 Air_Pressure                 = np.array([lst.history(('e',lst.element.row_name[i],'PAIR'))[1] for i in range(lst.element.num_rows)])
 Capillary_Pressure           = np.array([lst.history(('e',lst.element.row_name[i],'PCAP'))[1] for i in range(lst.element.num_rows)])
 Temperature                  = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
-vapor_mass_fraction_in_gas   = 1-np.array([lst.history(('e',lst.element.row_name[i],'XAIRG'))[1] for i in range(lst.element.num_rows)])
+Vapor_mass_fraction_in_gas   = 1-np.array([lst.history(('e',lst.element.row_name[i],'XAIRG'))[1] for i in range(lst.element.num_rows)])
                              
 Liquid_flow_kgPs             = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])
 Liquid_flow_raw              = Liquid_flow_kgPs/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
@@ -42,16 +42,20 @@ Gas_flow_raw                 = Gas_flow_kgPs/dat.grid.connectionlist[0].area/liq
 Vapor_diff_flow_kgPs         = np.array([lst.history(('c',lst.connection.row_name[i],'VAPDIF'))[1] for i in range(lst.connection.num_rows)])
 Vapor_diff_flow_raw          = Vapor_diff_flow_kgPs/dat.grid.connectionlist[0].area/liq_density_kgPm3*m2mm*day2s
 
-Vapor_flow_raw               = vapor_mass_fraction_in_gas[1:]*Gas_flow_raw
-air_flow_raw                 = (1-vapor_mass_fraction_in_gas[1:])*Gas_flow_raw
+
+Vapor_flow_raw               = (Vapor_mass_fraction_in_gas[1:]+Vapor_mass_fraction_in_gas[:-1])/2*Gas_flow_raw
+Vapor_flow_adv_raw           = Vapor_flow_raw-Vapor_diff_flow_raw
+Air_flow_raw                 = (1-(Vapor_mass_fraction_in_gas[1:]+Vapor_mass_fraction_in_gas[:-1])/2)*Gas_flow_raw
+Vapor_pressure               = Gas_Pressure-Air_Pressure
+
 Liquid_flow_topsoil          = Liquid_flow_raw[0]
 Gas_flow_topsoil             = Gas_flow_raw[0]
-vapor_flow_topsoil           = Vapor_flow_raw[0]
+Vapor_flow_topsoil           = Vapor_flow_raw[0]
+Vapor_flow_adv_topsoil       = Vapor_flow_adv_raw[0]
 Vapor_diff_flow_topsoil      = Vapor_diff_flow_raw[0]
+Air_flow_topsoil             = Air_flow_raw[0] 
 Liquid_flow_bottom           = Liquid_flow_raw[-1]
-vapor_flow_bottom            = Vapor_flow_raw[-1]
-Air_flow_topsoil             = air_flow_raw[0]    
-Vapor_pressure               = Gas_Pressure-Air_Pressure
+Vapor_flow_bottom            = Vapor_flow_raw[-1]
 	   
 Gas_permeability             = np.array([lst.history(('p',lst.primary.row_name[i],'K(GAS)'))[1] for i in range(lst.primary.num_rows)])
 Liq_permeability             = np.array([lst.history(('p',lst.primary.row_name[i],'K(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
@@ -65,16 +69,15 @@ Liq_permeability             = np.array([lst.history(('p',lst.primary.row_name[i
 # Second_thermodynamic_var     = np.array([lst.history(('p',lst.primary.row_name[i],'X2'))[1] for i in range(lst.primary.num_rows)])
 # Third_thermodynamic_var      = np.array([lst.history(('p',lst.primary.row_name[i],'X3'))[1] for i in range(lst.primary.num_rows)])
                              
-                             
 Gas_mass_element             = np.array([element_volume*Gas_Density[1:-1,i]*Gas_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity for i in range(lst.num_times)])
-liquid_mass_element          = np.array([element_volume*Liq_Density[1:-1,i]*Liq_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity for i in range(lst.num_times)])
+Liquid_mass_element          = np.array([element_volume*Liq_Density[1:-1,i]*Liq_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity for i in range(lst.num_times)])
 Vapor_mass_element           = np.array([vapor_mass_fraction_in_gas[1:-1,i]*element_volume*Gas_Density[1:-1,i]*Gas_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity for i in range(lst.num_times)])
 Air_mass_element             = np.array([(1-vapor_mass_fraction_in_gas[1:-1,i])*element_volume*Gas_Density[1:-1,i]*Gas_saturation[1:-1,i]*dat.grid.rocktype['MATRI'].porosity for i in range(lst.num_times)])
 Gas_mass                     = np.sum(Gas_mass_element,axis=1) 
-liquid_mass                  = np.sum(liquid_mass_element,axis=1) 
+Liquid_mass                  = np.sum(Liquid_mass_element,axis=1) 
 Vapor_mass                   = np.sum(Vapor_mass_element,axis=1) 
-air_mass                     = np.sum(Air_mass_element,axis=1)
+Air_mass                     = np.sum(Air_mass_element,axis=1)
 
-Net_water_mass=np.diff(liquid_mass+Vapor_mass)
-Total_water_flux=(vapor_flow_bottom+Liquid_flow_bottom-vapor_flow_topsoil-Liquid_flow_topsoil)
+Net_water_mass=np.diff(Liquid_mass+Vapor_mass)
+Total_water_flux=(Vapor_flow_bottom+Liquid_flow_bottom-Vapor_flow_topsoil-Liquid_flow_topsoil)
 Net_water_flux=Total_water_flux[:-1]*dat.grid.connectionlist[0].area*liq_density_kgPm3/m2mm/day2s*np.diff(lst.times)
