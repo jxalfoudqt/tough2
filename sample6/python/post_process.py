@@ -28,7 +28,7 @@ while i<lst.num_times:
     fig.subplots_adjust(left=0.07, right=0.93, top=0.93, bottom=0.05)
 	
     ax11=plt.subplot(331)
-    ax11.plot(liq_density_kgPm3[:,i]*100,element_value,'k1-')
+    ax11.plot(liq_saturation[:,i]*100,element_value,'k1-')
     plt.ylabel('x (m)')
     plt.xlabel('Liq. sat. (%)')
     # plt.ylabel('high (m)')
@@ -251,7 +251,7 @@ while i<lst.num_times:
     ax7.plot(lst.times[:i+1]/day2s,vapor_diff_flow_top_mmPday[:i+1],'k1-')
     plt.ylabel('Vap. Dif. Top(mm/day)')
     #plt.xlabel('Time (day)')
-    plt.ylim(0.06,0.13)
+    plt.ylim(0.08,0.13)
     #plt.ylim(np.min(vapor_diff_flow_top_mmPday),np.max(vapor_diff_flow_top_mmPday))
     plt.xlim(0,np.max(lst.times)/day2s)
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
