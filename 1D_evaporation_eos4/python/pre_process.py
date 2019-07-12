@@ -65,7 +65,7 @@ dat.grid.add_rocktype(r2)
 #r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
 
 r2.relative_permeability = {'type': 1, 'parameters': [0.1,0.0,1.0,0.1,]}
-r2.capillarity = {'type': 1, 'parameters': [0.5e8, 0., 1.0]}
+r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
 
 bvol = 0.0
 conarea = dx[0] * dy[0]
@@ -100,11 +100,11 @@ for i in range(len(dat.grid.blocklist)-1):
 dat.incon['bdy01'] = [None, [101.3e3, 10.99, 13.0]]
 
 # #add generator:
-flow_rate_mmPday=-50
+flow_rate_mmPday=-10
 flow_rate=flow_rate_mmPday*conarea*liq_density_kgPm3/m2mm/day2s
 gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
                   gx = flow_rate, type = 'WATE')
-#dat.add_generator(gen)
+dat.add_generator(gen)
 
 
 # #--- write TOUGH2 input file ------------------------------------	
