@@ -19,7 +19,7 @@ dat.title = '1D_evaporation_eos4'
 
 # #--- set up the model ---------------------------------
 length = 1.5
-nblks = 15
+nblks = 45
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
 geo = mulgrid().rectangular(dx, dy, dz)
@@ -28,21 +28,27 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 3.e3,
-     'tstop': 3.e8,
-     'const_timestep': 100.,
+    {'max_timesteps': 1.e3,
+     'const_timestep': -1,
+     'tstop': 3.e5,
      'gravity': 9.81,
      'print_level': 2,
-     'default_incons': [101.3e3, 10.9999, 20.0, None]})
+     'texp': 2.41e-05,	
+     'timestep': [1.0],
+     'be': 2.334,
+     'default_incons': [101.3e3, 10.99, 13.0, None]})
+	 
 dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
-dat.parameter['max_timestep']=dat.parameter['const_timestep']*10
+dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
+
 dat.start = True
 dat.diffusion=[[2.13e-5,     0.e-8],   [2.13e-5,     0.e-8]]
 dat.multi={'num_components': 2, 'num_equations': 3, 'num_phases': 2, 'num_secondary_parameters': 8}
 
 # #Set MOPs:
 dat.parameter['option'][1] = 1
-dat.parameter['option'][7] = 9
+dat.parameter['option'][7] = 0
+dat.parameter['option'][11] = 0
 dat.parameter['option'][16] = 4
 dat.parameter['option'][19] = 2
 dat.parameter['option'][21] = 3
@@ -55,8 +61,11 @@ r1.capillarity = {'type': 7, 'parameters': [0.627, 0.045, 5.e-4, 1.e8, 1.]}
 	
 r2 = rocktype('BOUND', nad=2,porosity=0.99,density=2650., permeability = [2.e-12, 2.e-12, 2.e-12],conductivity=2.51,specific_heat=1.e5)
 dat.grid.add_rocktype(r2)
-r2.relative_permeability = {'type': 1, 'parameters': [0.1, 0., 1., 0.1]}
-r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
+#r2.relative_permeability = {'type': 1, 'parameters': [0.1, 0., 1., 0.1]}
+#r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
+
+r2.relative_permeability = {'type': 1, 'parameters': [0.1,0.0,1.0,0.1,]}
+r2.capillarity = {'type': 1, 'parameters': [0.5e8, 0., 1.0]}
 
 bvol = 0.0
 conarea = dx[0] * dy[0]
@@ -72,8 +81,8 @@ b1 = t2block('bdy01', bvol, r2)
 b1.volume=1.e50
 dat.grid.add_block(b1)
 
-con1 = t2connection([b1, dat.grid.blocklist[0]],
-                    distance = [condist, 0.5*dz[0],], area = conarea, direction=3)
+con1 = t2connection([dat.grid.blocklist[0],b1],
+                    distance = [0.5*dz[0],condist], area = conarea, direction=3)
 dat.grid.add_connection(con1)
 
 # b2 = t2block('bdy02', bvol, dat.grid.rocktype['BOUND'])
@@ -86,16 +95,16 @@ dat.grid.connectionlist[-1].dircos=-1
 dat.grid.blocklist[-1].ahtx=conarea
 
 # #Set initial condition:
-for i in range(len(dat.grid.blocklist)):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+500*(2*i+1), 10.0001, 20.0]]
-dat.incon['bdy01'] = [None, [101.3e3, 10.9999, 20.0]]
+for i in range(len(dat.grid.blocklist)-1):
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liq_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
+dat.incon['bdy01'] = [None, [101.3e3, 10.99, 13.0]]
 
 # #add generator:
-flow_rate_mmPday=-100
+flow_rate_mmPday=-50
 flow_rate=flow_rate_mmPday*conarea*liq_density_kgPm3/m2mm/day2s
 gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
                   gx = flow_rate, type = 'WATE')
-dat.add_generator(gen)
+#dat.add_generator(gen)
 
 
 # #--- write TOUGH2 input file ------------------------------------	

@@ -37,11 +37,11 @@ capillary_pressure_pa               = np.array([lst.history(('e',lst.element.row
 temperature_degree                  = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
 vapor_mass_fraction_in_gas          = 1-np.array([lst.history(('e',lst.element.row_name[i],'XAIRG'))[1] for i in range(lst.element.num_rows)])
                                     
-liquid_flow_kgPs                    = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])
+liquid_flow_kgPs                    = -1*np.array([lst.history(('c',lst.connection.row_name[i],'FLO(LIQ.)'))[1] for i in range(lst.connection.num_rows)])
 liquid_flow_mmPday                  = liquid_flow_kgPs/dat.grid.connectionlist[0].area/liquid_density_kgPm3*m2mm*day2s
-gas_flow_kgPs                       = np.array([lst.history(('c',lst.connection.row_name[i],'FLO(GAS)'))[1] for i in range(lst.connection.num_rows)])
+gas_flow_kgPs                       = -1*np.array([lst.history(('c',lst.connection.row_name[i],'FLO(GAS)'))[1] for i in range(lst.connection.num_rows)])
 gas_flow_mmPday                     = gas_flow_kgPs/dat.grid.connectionlist[0].area/liquid_density_kgPm3*m2mm*day2s
-vapor_diff_flow_kgPs                = np.array([lst.history(('c',lst.connection.row_name[i],'VAPDIF'))[1] for i in range(lst.connection.num_rows)])
+vapor_diff_flow_kgPs                = -1*np.array([lst.history(('c',lst.connection.row_name[i],'VAPDIF'))[1] for i in range(lst.connection.num_rows)])
 vapor_diff_flow_mmPday              = vapor_diff_flow_kgPs/dat.grid.connectionlist[0].area/liquid_density_kgPm3*m2mm*day2s
                                     
 vapor_flow_mmPday                   = (vapor_mass_fraction_in_gas[1:]+vapor_mass_fraction_in_gas[:-1])/2*gas_flow_mmPday
