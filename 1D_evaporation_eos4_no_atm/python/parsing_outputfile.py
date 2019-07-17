@@ -59,29 +59,4 @@ liquid_flow_second_mmPday           = liquid_flow_mmPday[1]
 gas_flow_second_mmPday              = gas_flow_mmPday[1]
 vapor_flow_second_mmPday            = vapor_flow_mmPday[1]
 vapor_adv_flow_second_mmPday        = vapor_adv_flow_mmPday[1]
-vapor_diff_flow_second_mmPday       = vapor_diff_flow_mmPday[1]
-  
-#gas_relative_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(GAS)'))[1] for i in range(lst.primary.num_rows)])
-#liq_relative_permeability           = np.array([lst.history(('p',lst.primary.row_name[i],'K(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
-                                    
-# GAS_H                               = np.array([lst.history(('p',lst.primary.row_name[i],'H(GAS)'))[1] for i in range(lst.primary.num_rows)])
-# Liq_H                               = np.array([lst.history(('p',lst.primary.row_name[i],'H(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
-# First_thermodynamic_change          = np.array([lst.history(('p',lst.primary.row_name[i],'DX1'))[1] for i in range(lst.primary.num_rows)])
-# Second_thermodynamic_change         = np.array([lst.history(('p',lst.primary.row_name[i],'DX2'))[1] for i in range(lst.primary.num_rows)])
-# Third_thermodynamic_change          = np.array([lst.history(('p',lst.primary.row_name[i],'DX3'))[1] for i in range(lst.primary.num_rows)])
-# First_thermodynamic_var             = np.array([lst.history(('p',lst.primary.row_name[i],'X1'))[1] for i in range(lst.primary.num_rows)])
-# Second_thermodynamic_var            = np.array([lst.history(('p',lst.primary.row_name[i],'X2'))[1] for i in range(lst.primary.num_rows)])
-# Third_thermodynamic_var             = np.array([lst.history(('p',lst.primary.row_name[i],'X3'))[1] for i in range(lst.primary.num_rows)])
-                                    
-liquid_mass_element_kg              = np.array([element_volume_m3*liq_density_kgPm3[1:-1,i]*liq_saturation[1:-1,i]*dat.grid.rocktype['SAND '].porosity for i in range(lst.num_times)])
-liquid_mass_kg                      = np.sum(liquid_mass_element_kg,axis=1) 
-vapor_mass_element_kg               = np.array([vapor_mass_fraction_in_gas[1:-1,i]*element_volume_m3*gas_density_kgPm3[1:-1,i]*gas_saturation[1:-1,i]*dat.grid.rocktype['SAND '].porosity for i in range(lst.num_times)])
-vapor_mass_kg                       = np.sum(vapor_mass_element_kg,axis=1) 
-liquid_flow_bottom_kgPs             = liquid_flow_kgPs[-1]
-vapor_flow_bottom_kgPs              = vapor_flow_kgPs[-1]
-liquid_flow_top_kgPs                = liquid_flow_kgPs[0]
-vapor_flow_top_kgPs                 = vapor_flow_kgPs[0]                                    
-total_water_mass_kg                 = liquid_mass_kg+vapor_mass_kg                                    
-water_mass_change_over_time_kg      = np.diff(total_water_mass_kg)
-total_water_net_flux_kgPs           = liquid_flow_bottom_kgPs+vapor_flow_bottom_kgPs-liquid_flow_top_kgPs-vapor_flow_top_kgPs
-water_amount_change_over_time_kg    = total_water_net_flux_kgPs[1:]*np.diff(lst.times)
+vapor_diff_flow_second_mmPday       = vapor_diff_flow_mmPday[1] 
