@@ -28,7 +28,7 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.e3,
+    {'max_timesteps': 1.e2,
      'const_timestep': -1,
      'tstop': 3.e8,
      'gravity': 9.81,
@@ -38,7 +38,7 @@ dat.parameter.update(
      'be': 2.334,
      'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/100
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True

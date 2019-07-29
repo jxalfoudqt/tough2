@@ -79,9 +79,11 @@ vapor_mass_element_kg               = np.array([vapor_mass_fraction_in_gas[1:-1,
 vapor_mass_kg                       = np.sum(vapor_mass_element_kg,axis=1) 
 liquid_flow_bottom_kgPs             = liquid_flow_kgPs[-1]
 vapor_flow_bottom_kgPs              = vapor_flow_kgPs[-1]
-liquid_flow_top_kgPs                = liquid_flow_kgPs[0]
-vapor_flow_top_kgPs                 = vapor_flow_kgPs[0]                                    
+liquid_flow_top_kgPs                = liquid_flow_kgPs[1]
+vapor_flow_top_kgPs                 = vapor_flow_kgPs[1]                                    
 total_water_mass_kg                 = liquid_mass_kg+vapor_mass_kg                                    
 water_mass_change_over_time_kg      = np.diff(total_water_mass_kg)
 total_water_net_flux_kgPs           = liquid_flow_bottom_kgPs+vapor_flow_bottom_kgPs-liquid_flow_top_kgPs-vapor_flow_top_kgPs
 water_amount_change_over_time_kg    = total_water_net_flux_kgPs[1:]*np.diff(lst.times)
+print np.sum(water_mass_change_over_time_kg)
+print np.sum(water_amount_change_over_time_kg)
