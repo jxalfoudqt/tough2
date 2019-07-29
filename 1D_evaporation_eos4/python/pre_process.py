@@ -7,11 +7,13 @@ import os
 from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
-liq_density_kgPm3=1000
+liquid_density_kgPm3=1000
 water_molecular_weight=0.018
-R_value=8.314
-m2mm=1000
-day2s=3600*24
+paPkpa=1.e-3
+water_molecular_weight=0.018
+R_value=8.3145
+mPmm=1.e-3
+dayPs=1./(3600*24)
 T_kelven=273.15
 
 dat = t2data()
@@ -28,7 +30,7 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.e2,
+    {'max_timesteps': 1.e3,
      'const_timestep': -1,
      'tstop': 3.e8,
      'gravity': 9.81,
@@ -38,7 +40,7 @@ dat.parameter.update(
      'be': 2.334,
      'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/100
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
@@ -96,14 +98,14 @@ dat.grid.blocklist[-1].ahtx=conarea
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)-1):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liq_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
 dat.incon['bdy01'] = [None, [101.3e3, 10.99, 13.0]]
 
 # #add generator:
-flow_rate_mmPday=-1
-flow_rate=flow_rate_mmPday*conarea*liq_density_kgPm3/m2mm/day2s
+flow_rate_mmPday=-10
+flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
 gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
-                  gx = flow_rate, type = 'COM1')
+                  gx = flow_rate_kgPs, type = 'COM1')
 dat.add_generator(gen)
 
 
