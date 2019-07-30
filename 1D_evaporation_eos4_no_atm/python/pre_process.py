@@ -7,18 +7,19 @@ import os
 from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
-liq_density_kgPm3=1000
+liquid_density_kgPm3=1000
+paPkpa=1.e-3
 water_molecular_weight=0.018
-R_value=8.314
-m2mm=1000
-day2s=3600*24
+R_value=8.3145
+mPmm=1.e-3
+dayPs=1./(3600*24)
 T_kelven=273.15
 
 dat = t2data()
 dat.title = '1D_evaporation_eos4'
 
 # #--- set up the model ---------------------------------
-length = 1.5
+length = 0.5
 nblks = 45
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
@@ -58,26 +59,23 @@ r1 = rocktype('SAND ', nad=2, porosity=0.45,density=2650.,permeability = [2.e-12
 dat.grid.add_rocktype(r1)
 r1.relative_permeability = {'type': 7, 'parameters': [0.627, 0.045, 1., 0.054]}
 r1.capillarity = {'type': 7, 'parameters': [0.627, 0.045, 5.e-4, 1.e8, 1.]}
-
+	
 conarea = dx[0] * dy[0]
-
   
 # #assign rocktype and parameter values:
 for blk in dat.grid.blocklist:
     blk.rocktype = r1
     blk.ahtx=conarea
-	
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liq_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
-
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
 
 # #add generator:
 flow_rate_mmPday=-1
-flow_rate=flow_rate_mmPday*conarea*liq_density_kgPm3/m2mm/day2s
+flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
 gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
-                  gx = flow_rate, type = 'COM1')
+                  gx = flow_rate_kgPs, type = 'COM1')
 dat.add_generator(gen)
 
 
