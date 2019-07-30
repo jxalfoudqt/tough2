@@ -217,7 +217,7 @@ while i<lst.num_times:
 
     ax7=plt.subplot(818)
     ax7.plot(lst.times[:i+1]*dayPs,water_generation_mmPday[:,:i+1][0],'k1-')
-    #plt.ylim(-11,-9)
+    plt.ylim(-11,-9)
     plt.xlim(0,np.max(lst.times)*dayPs)
     ax7.set_xscale('log')
     #plt.ylabel('water generation\n(mm/day)')
