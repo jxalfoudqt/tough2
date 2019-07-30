@@ -8,7 +8,6 @@ from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
 liquid_density_kgPm3=1000
-water_molecular_weight=0.018
 paPkpa=1.e-3
 water_molecular_weight=0.018
 R_value=8.3145
@@ -20,7 +19,7 @@ dat = t2data()
 dat.title = '1D_evaporation_eos4'
 
 # #--- set up the model ---------------------------------
-length = 1.5
+length = 0.5
 nblks = 45
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
@@ -32,7 +31,7 @@ dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
     {'max_timesteps': 1.e3,
      'const_timestep': -1,
-     'tstop': 3.e8,
+     'tstop': 3.e9,
      'gravity': 9.81,
      'print_level': 2,
      'texp': 2.41e-05,	
