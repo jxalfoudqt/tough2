@@ -18,7 +18,7 @@ dat = t2data()
 dat.title = '1D_evaporation_eos4'
 
 # #--- set up the model ---------------------------------
-length = 1
+length = 1.
 nblks = 50
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
