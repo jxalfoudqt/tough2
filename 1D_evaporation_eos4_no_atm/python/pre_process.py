@@ -8,7 +8,7 @@ from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
 liquid_density_kgPm3=1000
-paPkpa=1.e-3
+paPkpa=1.e3
 water_molecular_weight=0.018
 R_value=8.3145
 mPmm=1.e-3
@@ -19,8 +19,8 @@ dat = t2data()
 dat.title = '1D_evaporation_eos4'
 
 # #--- set up the model ---------------------------------
-length = 0.5
-nblks = 45
+length = 1.0
+nblks = 50
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
 geo = mulgrid().rectangular(dx, dy, dz)
@@ -29,9 +29,9 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.2e2,
+    {'max_timesteps': 1.e3,
      'const_timestep': -1,
-     'tstop': 1.e7,
+     'tstop': 1.5e6,
      'gravity': 9.81,
      'print_level': 2,
      'texp': 2.41e-05,	
@@ -72,7 +72,7 @@ for i in range(len(dat.grid.blocklist)):
     dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
 
 # #add generator:
-flow_rate_mmPday=-1
+flow_rate_mmPday=-5
 flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
 gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
                   gx = flow_rate_kgPs, type = 'COM1')
