@@ -8,7 +8,6 @@ from t2data import *
 from mpl_toolkits.mplot3d import Axes3D
 
 liquid_density_kgPm3=1000
-paPkpa=1.e3
 water_molecular_weight=0.018
 R_value=8.3145
 mPmm=1.e-3
