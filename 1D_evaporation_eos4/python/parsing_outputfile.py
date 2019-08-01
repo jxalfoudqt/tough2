@@ -55,7 +55,7 @@ water_generation_liquid_mmPday          = water_generation_mmPday*water_generati
 vapor_flow_mmPday                       = vapor_mass_fraction_in_gas[1:]*gas_flow_mmPday
 vapor_flow_kgPs                         = vapor_mass_fraction_in_gas[1:]*gas_flow_kgPs
 vapor_adv_flow_mmPday                   = vapor_flow_mmPday-vapor_diff_flow_mmPday
-vapor_pressure_pa                       = gas_pressure_pa-air_pressure_pa
+
                                         
 liquid_flow_top_mmPday                  = liquid_flow_mmPday[0]
 gas_flow_top_mmPday                     = gas_flow_mmPday[0]
