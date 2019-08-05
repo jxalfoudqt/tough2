@@ -55,7 +55,7 @@ water_generation_liquid_mmPday          = water_generation_mmPday*water_generati
 vapor_flow_mmPday                       = vapor_mass_fraction_in_gas[1:]*gas_flow_mmPday
 vapor_flow_kgPs                         = vapor_mass_fraction_in_gas[1:]*gas_flow_kgPs
 vapor_adv_flow_mmPday                   = vapor_flow_mmPday-vapor_diff_flow_mmPday
-vapor_pressure_pa                       = gas_pressure_pa-air_pressure_pa
+
                                         
 liquid_flow_top_mmPday                  = liquid_flow_mmPday[0]
 gas_flow_top_mmPday                     = gas_flow_mmPday[0]
@@ -95,8 +95,3 @@ total_water_net_flux_kgPs               = liquid_flow_bottom_kgPs+vapor_flow_bot
 water_amount_change_over_time_kg        = total_water_net_flux_kgPs[1:]*np.diff(lst.times)
 print 'water_mass_change_over_time_kg='+str(np.sum(water_mass_change_over_time_kg))
 print 'water_amount_change_over_time_kg='+str(np.sum(water_amount_change_over_time_kg))
-
-vapor_mass_fraction_in_gas_gradient     = np.gradient(vapor_mass_fraction_in_gas[:,10],axis=0)
-diffusion_coefficient                   = 2.13e-5*(1.01325e5/(gas_pressure_pa[:,10]))*((temperature_degree[:,10]+273.15)/273.15)**1.8
-diffusion_calculation                   = -0.45**(4./3)*(gas_saturation[:,10])**(10./3)*gas_density_kgPm3[:,10]*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient
-diffusion_calculation_relative_error    = np.abs((diffusion_calculation[1:]+vapor_diff_flow_kgPs[:,10])/vapor_diff_flow_kgPs[:,10])
