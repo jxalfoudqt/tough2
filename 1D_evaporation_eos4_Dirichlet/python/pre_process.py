@@ -13,7 +13,7 @@ R_value=8.3145
 mPmm=1.e-3
 dayPs=1./(3600*24)
 T_kelven=273.15
-
+T_initial=13.0
 dat = t2data()
 dat.title = '1D_evaporation_eos4'
 
@@ -30,7 +30,7 @@ dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
     {'max_timesteps': 1.e3,
      'const_timestep': -1,
-     'tstop': 3.e9,
+     'tstop': 3.1536e7,
      'gravity': 9.81,
      'print_level': 2,
      'texp': 2.41e-05,	
@@ -65,7 +65,9 @@ dat.grid.add_rocktype(r2)
 #r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
 
 r2.relative_permeability = {'type': 1, 'parameters': [0.1,0.0,1.0,0.1,]}
-r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
+relative_humidity=0.30
+P_bound=np.log(relative_humidity)*liquid_density_kgPm3*R_value*(T_initial+T_kelven)/water_molecular_weight
+r2.capillarity = {'type': 1, 'parameters': [-P_bound, 0., 1.0]}
 
 bvol = 0.0
 conarea = dx[0] * dy[0]
@@ -96,15 +98,15 @@ dat.grid.blocklist[-1].ahtx=conarea
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)-1):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
-dat.incon['bdy01'] = [None, [101.3e3, 10.99, 13.0]]
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, T_initial]]
+dat.incon['bdy01'] = [None, [101.3e3, 10.99, T_initial]]
 
-# #add generator:
-flow_rate_mmPday=-5
-flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
-gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
-                  gx = flow_rate_kgPs, type = 'COM1')
-dat.add_generator(gen)
+# # #add generator:
+# flow_rate_mmPday=-5
+# flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
+# gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
+                  # gx = flow_rate_kgPs, type = 'COM1')
+# dat.add_generator(gen)
 
 
 # #--- write TOUGH2 input file ------------------------------------	
