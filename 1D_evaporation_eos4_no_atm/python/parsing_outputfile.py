@@ -55,7 +55,6 @@ water_generation_liquid_mmPday          = water_generation_mmPday*water_generati
 vapor_flow_mmPday                       = vapor_mass_fraction_in_gas[1:]*gas_flow_mmPday
 vapor_flow_kgPs                         = vapor_mass_fraction_in_gas[1:]*gas_flow_kgPs
 vapor_adv_flow_mmPday                   = vapor_flow_mmPday-vapor_diff_flow_mmPday
-vapor_pressure_pa                       = gas_pressure_pa-air_pressure_pa
                                         
 liquid_flow_top_mmPday                  = liquid_flow_mmPday[0]
 gas_flow_top_mmPday                     = gas_flow_mmPday[0]
@@ -96,7 +95,19 @@ water_amount_change_over_time_kg        = total_water_net_flux_kgPs[1:]*np.diff(
 print 'water_mass_change_over_time_kg='+str(np.sum(water_mass_change_over_time_kg))
 print 'water_amount_change_over_time_kg='+str(np.sum(water_amount_change_over_time_kg))
 
-vapor_mass_fraction_in_gas_gradient     = np.gradient(vapor_mass_fraction_in_gas[:,10],axis=0)
+vapor_mass_fraction_in_gas_gradient     = np.gradient(vapor_mass_fraction_in_gas[:,10],axis=0)/(1./50)
 diffusion_coefficient                   = 2.13e-5*(1.01325e5/(gas_pressure_pa[:,10]))*((temperature_degree[:,10]+273.15)/273.15)**1.8
-diffusion_calculation                   = -0.45**(4./3)*(gas_saturation[:,10])**(10./3)*gas_density_kgPm3[:,10]*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient
+diffusion_calculation                   = -0.45**(10./3)*(gas_saturation[:,10])**(10./3)*gas_density_kgPm3[:,10]*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient
 diffusion_calculation_relative_error    = np.abs((diffusion_calculation[1:]+vapor_diff_flow_kgPs[:,10])/vapor_diff_flow_kgPs[:,10])
+
+
+vapor_pressure_pa                                = gas_pressure_pa-air_pressure_pa
+vapor_density_kgPm3                              = gas_density_kgPm3*vapor_mass_fraction_in_gas
+relative_humidity_percent                        = np.exp(capillary_pressure_pa*9.81*water_molecular_weight/R_value/(temperature_degree+T_kelven))
+vapor_saturated_pressure_pa                      = 611*np.exp(17.27*(temperature_degree+T_kelven-T_kelven)/(temperature_degree+T_kelven-35.85))
+vapor_pressure_pa_calculated                     = vapor_saturated_pressure_pa*relative_humidity_percent
+vapor_density_kgPm3_calculated                   = vapor_pressure_pa_calculated*water_molecular_weight/(R_value*temperature_degree)
+vapor_mass_fraction_in_gas_gradient_chenming     = np.gradient(vapor_pressure_pa_calculated,axis=0)/(1./50)
+diffusion_coefficient_chenming                   = 2.29e-5*((temperature_degree+273.15)/273.15)**1.75
+diffusion_calculation_chenming                   = diffusion_coefficient_chenming*(1-0.45*liq_saturation)*(1-0.45*liq_saturation)**(7./3)*vapor_mass_fraction_in_gas_gradient_chenming
+diffusion_calculation_relative_error_chenming    = np.abs((diffusion_calculation_chenming[1:]+vapor_diff_flow_kgPs)/vapor_diff_flow_kgPs)

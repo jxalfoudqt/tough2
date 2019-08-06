@@ -10,7 +10,6 @@ from mpl_toolkits.mplot3d import Axes3D
 liquid_density_kgPm3=1000
 water_molecular_weight=0.018
 kpaPpa=1.e-3
-water_molecular_weight=0.018
 R_value=8.3145
 mPmm=1.e-3
 dayPs=1./(3600*24)
@@ -55,3 +54,21 @@ gas_flow_top_mmPday                     = gas_flow_mmPday[0]
 vapor_flow_top_mmPday                   = vapor_flow_mmPday[0]
 vapor_adv_flow_top_mmPday               = vapor_adv_flow_mmPday[0]
 vapor_diff_flow_top_mmPday              = vapor_diff_flow_mmPday[0]
+
+
+
+vapor_mass_fraction_in_gas_gradient     = np.gradient(vapor_mass_fraction_in_gas,axis=0)/(1./50)
+diffusion_coefficient                   = 2.13e-5*(1.01325e5/(gas_pressure_pa))*((temperature_degree+273.15)/273.15)**1.8
+diffusion_calculation                   = -0.45**(4./3)*(gas_saturation)**(10./3)*gas_density_kgPm3*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient
+diffusion_calculation_relative_error    = np.abs((diffusion_calculation[1:]+vapor_diff_flow_kgPs)/vapor_diff_flow_kgPs)
+
+vapor_pressure_pa                                = gas_pressure_pa-air_pressure_pa
+vapor_density_kgPm3                              = gas_density_kgPm3*vapor_mass_fraction_in_gas
+relative_humidity_percent                        = np.exp(capillary_pressure_pa*9.81*water_molecular_weight/R_value/(temperature_degree+T_kelven))
+vapor_saturated_pressure_pa                      = 611*np.exp(17.27*(temperature_degree+T_kelven-T_kelven)/(temperature_degree+T_kelven-35.85))
+vapor_pressure_pa_calculated                     = vapor_saturated_pressure_pa*relative_humidity_percent
+vapor_density_kgPm3_calculated                   = vapor_pressure_pa_calculated*water_molecular_weight/(R_value*temperature_degree)
+vapor_mass_fraction_in_gas_gradient_chenming     = np.gradient(vapor_pressure_pa_calculated,axis=0)/(1./50)
+diffusion_coefficient_chenming                   = 2.29e-5*((temperature_degree+273.15)/273.15)**1.75
+diffusion_calculation_chenming                   = diffusion_coefficient_chenming*(1-0.45*liq_saturation)*(1-0.45*liq_saturation)**(7./3)*vapor_mass_fraction_in_gas_gradient_chenming
+diffusion_calculation_relative_error_chenming    = np.abs((diffusion_calculation[1:]+vapor_diff_flow_kgPs)/vapor_diff_flow_kgPs)

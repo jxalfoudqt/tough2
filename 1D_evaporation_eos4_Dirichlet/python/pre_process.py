@@ -48,7 +48,7 @@ dat.multi={'num_components': 2, 'num_equations': 3, 'num_phases': 2, 'num_second
 # #Set MOPs:
 dat.parameter['option'][1] = 1
 dat.parameter['option'][7] = 0
-dat.parameter['option'][11] = 0
+dat.parameter['option'][11] = 2
 dat.parameter['option'][16] = 4
 dat.parameter['option'][19] = 2
 dat.parameter['option'][21] = 3
@@ -99,7 +99,7 @@ dat.grid.blocklist[-1].ahtx=conarea
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)-1):
     dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, T_initial]]
-dat.incon['bdy01'] = [None, [101.3e3, 10.99, T_initial]]
+dat.incon['bdy01'] = [None, [101.3e3, 0.9999, T_initial]]
 
 # # #add generator:
 # flow_rate_mmPday=-5
