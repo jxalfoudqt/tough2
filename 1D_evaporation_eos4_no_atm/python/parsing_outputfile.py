@@ -10,12 +10,12 @@ from mpl_toolkits.mplot3d import Axes3D
 liquid_density_kgPm3=1000
 water_molecular_weight=0.018
 kpaPpa=1.e-3
-water_molecular_weight=0.018
 R_value=8.3145
 mPmm=1.e-3
 dayPs=1./(3600*24)
 T_kelven=273.15
 
+dat       = t2data()
 dat.title = '1D_evaporation_eos4'
 # --- post-process the output ---------------------------
 lst = t2listing(dat.title+'.listing')
@@ -97,7 +97,7 @@ print 'water_amount_change_over_time_kg='+str(np.sum(water_amount_change_over_ti
 
 vapor_mass_fraction_in_gas_gradient     = np.gradient(vapor_mass_fraction_in_gas[:,10],axis=0)/(1./50)
 diffusion_coefficient                   = 2.13e-5*(1.01325e5/(gas_pressure_pa[:,10]))*((temperature_degree[:,10]+273.15)/273.15)**1.8
-diffusion_calculation                   = -0.45**(10./3)*(gas_saturation[:,10])**(10./3)*gas_density_kgPm3[:,10]*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient
+diffusion_calculation                   = -0.45**(4./3)*(gas_saturation[:,10])**(10./3)*gas_density_kgPm3[:,10]*diffusion_coefficient*vapor_mass_fraction_in_gas_gradient*dat.grid.connectionlist[0].area
 diffusion_calculation_relative_error    = np.abs((diffusion_calculation[1:]+vapor_diff_flow_kgPs[:,10])/vapor_diff_flow_kgPs[:,10])
 
 
