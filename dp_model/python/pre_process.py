@@ -15,13 +15,16 @@ dayPs=1./(3600*24)
 T_kelven=273.15
 
 dat = t2data()
-dat.title = '1D_evaporation_eos4'
+dat.title = 'dp_model_flow'
 
 # #--- set up the model ---------------------------------
-length = 1.0
-nblks = 50
-dz = [length / nblks] * nblks
-dy = dx = [0.1]
+length_x = 1.0
+nblks_x = 10
+length_z = 0.5
+nblks_z = 5
+dx = [length_x / nblks_x] * nblks_x
+dz = [length_z / nblks_z] * nblks_z
+dy = [0.1]
 geo = mulgrid().rectangular(dx, dy, dz)
 geo.write(dat.title+'.dat')
 
@@ -41,8 +44,8 @@ dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
-dat.diffusion=[[2.13e-5,     0.e-8],   [2.13e-5,     0.e-8]]
-dat.multi={'num_components': 2, 'num_equations': 3, 'num_phases': 2, 'num_secondary_parameters': 8}
+# dat.diffusion=[[2.13e-5,     0.e-8],   [2.13e-5,     0.e-8]]
+# dat.multi={'num_components': 2, 'num_equations': 3, 'num_phases': 2, 'num_secondary_parameters': 8}
 
 # #Set MOPs:
 dat.parameter['option'][1] = 1
@@ -52,31 +55,31 @@ dat.parameter['option'][16] = 4
 dat.parameter['option'][19] = 2
 dat.parameter['option'][21] = 3
 
-# #Add another rocktype, with relative permeability and capillarity functions & parameters:
-r1 = rocktype('SAND ', nad=2, porosity=0.45,density=2650.,permeability = [2.e-12, 2.e-12, 2.e-12],conductivity=2.51,specific_heat=920)
-r1.tortuosity=0
-dat.grid.add_rocktype(r1)
-r1.relative_permeability = {'type': 7, 'parameters': [0.627, 0.045, 1., 0.054]}
-r1.capillarity = {'type': 7, 'parameters': [0.627, 0.045, 5.e-4, 1.e8, 1.]}
+# # #Add another rocktype, with relative permeability and capillarity functions & parameters:
+# r1 = rocktype('SAND ', nad=2, porosity=0.45,density=2650.,permeability = [2.e-12, 2.e-12, 2.e-12],conductivity=2.51,specific_heat=920)
+# r1.tortuosity=0
+# dat.grid.add_rocktype(r1)
+# r1.relative_permeability = {'type': 7, 'parameters': [0.627, 0.045, 1., 0.054]}
+# r1.capillarity = {'type': 7, 'parameters': [0.627, 0.045, 5.e-4, 1.e8, 1.]}
 	
-conarea = dx[0] * dy[0]
+# conarea = dx[0] * dy[0]
   
-# #assign rocktype and parameter values:
-for blk in dat.grid.blocklist:
-    blk.rocktype = r1
-    blk.ahtx=conarea
+# # #assign rocktype and parameter values:
+# for blk in dat.grid.blocklist:
+    # blk.rocktype = r1
+    # blk.ahtx=conarea
 
-# #Set initial condition:
-for i in range(len(dat.grid.blocklist)):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
+# # #Set initial condition:
+# for i in range(len(dat.grid.blocklist)):
+    # dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
 
-# #add generator:
-flow_rate_mmPday=-5
-flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
-gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
-                  gx = flow_rate_kgPs, type = 'COM1')
-dat.add_generator(gen)
+# # #add generator:
+# flow_rate_mmPday=-5
+# flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
+# gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
+                  # gx = flow_rate_kgPs, type = 'COM1')
+# dat.add_generator(gen)
 
 
 # #--- write TOUGH2 input file ------------------------------------	
-dat.write(dat.title)
+dat.write(dat.title+'.inp')
