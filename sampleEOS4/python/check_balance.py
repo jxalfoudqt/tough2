@@ -63,7 +63,7 @@ while i==0:#<lst.num_times:
     
     #---vapor_density---
     vapor_density_kgPm3                              = gas_density_kgPm3[:,i]*vapor_mass_fraction_in_gas[:,i]
-    vapor_density_kgPm3_calculated                   = vapor_pressure_pa_calculated*water_molecular_weight/(R_value*temperature_degree[:,i])
+    vapor_density_kgPm3_calculated                   = vapor_saturated_pressure_pa*water_molecular_weight/(R_value*temperature_degree[:,i]+T_kelven)
     
     
     #---our own method---

@@ -37,7 +37,7 @@ dat.parameter.update(
      'timestep': [1.0],
      'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/1000.
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
