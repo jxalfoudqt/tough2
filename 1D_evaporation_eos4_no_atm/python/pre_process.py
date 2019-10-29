@@ -32,12 +32,12 @@ dat.parameter.update(
      'const_timestep': -1,
      'tstop': 1.5e6,
      'gravity': 9.81,
-     'print_level': 2,
+     'print_level': -3,
      'texp': 1.8,	
      'timestep': [1.0],
      'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/1000.
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/20.
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
@@ -68,7 +68,7 @@ for blk in dat.grid.blocklist:
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 25.0]]
 
 # #add generator:
 flow_rate_mmPday=-5
