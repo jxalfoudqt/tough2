@@ -198,3 +198,5 @@ while i<lst.num_times:
     i+=1
 
 #plt.close('all')
+
+#ffmpeg -r 3/1 -start_number 101 -i output%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p output.mp4	

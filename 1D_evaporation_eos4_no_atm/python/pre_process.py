@@ -28,9 +28,9 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.e3,
+    {'max_timesteps': 3.e3,
      'const_timestep': -1,
-     'tstop': 1.5e6,
+     'tstop': 2.e6,
      'gravity': 9.81,
      'print_level': -3,
      'texp': 1.8,	

@@ -28,17 +28,17 @@ geo.write(dat.title+'.dat')
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.e3,
+    {'max_timesteps': 3.e3,
      'const_timestep': -1,
      'tstop': 3.e9,
      'gravity': 9.81,
-     'print_level': 2,
+     'print_level': -3,
      'texp': 2.41e-05,	
      'timestep': [1.0],
      'be': 2.334,
      'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/20.
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
@@ -96,7 +96,7 @@ dat.grid.blocklist[-1].ahtx=conarea
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)-1):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 13.0]]
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 25.0]]
 dat.incon['bdy01'] = [None, [101.3e3, 10.99, 13.0]]
 
 # #add generator:
