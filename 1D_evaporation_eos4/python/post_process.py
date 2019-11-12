@@ -54,19 +54,19 @@ while i<lst.num_times:
     ax2.tick_params(axis='x', colors='red')	 
 
     ax3=plt.subplot(443)
-    ax3.plot(vapor_diff_flow_mmPday[:,i]*1.e2,connection_value,'k1-')
+    ax3.plot(vapor_diff_flow_mmPday[:,i]*100,connection_value,'k1-')
     plt.xlabel('Vapor Diffusion ($*10^-2$ mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(1.1,-0.1)
-    #plt.xlim(-1,1)
-    plt.xlim(np.nanmin(vapor_diff_flow_mmPday)*1.e2,np.nanmax(vapor_diff_flow_mmPday)*1.e2)			
+    plt.xlim(-2,28)
+    #plt.xlim(np.nanmin(vapor_diff_flow_mmPday)*1.e2,np.nanmax(vapor_diff_flow_mmPday)*1.e2)			
     ax4=ax3.twiny()	
     ax4.plot(liquid_flow_mmPday[:,i]*100,connection_value,'r1-')
     plt.xlabel('Liquid Velocity ($*10^-2$ mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(1.1,-0.1)
-    #plt.xlim(-5.e-2,1.1)
-    plt.xlim(np.nanmin(liquid_flow_mmPday)*100,np.nanmax(liquid_flow_mmPday)*100)	
+    plt.xlim(-2,28)
+    #plt.xlim(np.nanmin(liquid_flow_mmPday)*100,np.nanmax(liquid_flow_mmPday)*100)	
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
     ax4.spines['top'].set_color('red')	
     ax4.xaxis.label.set_color('red')
@@ -232,4 +232,4 @@ while i<lst.num_times:
     i+=1
 
 #plt.close('all')
-#ffmpeg -r 3/1 -start_number 101 -i output%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p output.mp4
+#ffmpeg -r 3/1 -start_number 101 -i output_%03d.png -c:v libx264 -r 30 -pix_fmt yuv420p output.mp4
