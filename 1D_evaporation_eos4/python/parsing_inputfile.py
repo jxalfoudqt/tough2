@@ -116,12 +116,12 @@ for i in dat.grid.rocktype:
             lamda=capillarity_parameter[0]
             liquid_residual_saturation=capillarity_parameter[1]
             P_zero_point=1./capillarity_parameter[2]	
-            P_zero=np.linspace(P_zero_point-1500,P_zero_point+1500,9)
+            P_zero=np.linspace(P_zero_point-1500,P_zero_point+1500,5)
             Pressure_max=capillarity_parameter[3]		
             saturated_liquid_saturation=capillarity_parameter[4]
-            saturation2=np.linspace(0,liquid_residual_saturation,100)
+            saturation2=np.linspace(0,liquid_residual_saturation,50)
             #saturation1=np.linspace(liquid_residual_saturation,saturated_liquid_saturation,100)
-            saturation1=np.logspace(np.log10(liquid_residual_saturation),0,100)
+            saturation1=np.linspace(liquid_residual_saturation,1,100)
             #saturation2=np.linspace(0,liquid_residual_saturation,100)
             S_star=(saturation1-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
             capillary_pressure1=np.array([1*P_zero[j]*(S_star**(-1/lamda)-1)**(1-lamda) for j in range(len(P_zero))])    
@@ -132,13 +132,12 @@ for i in dat.grid.rocktype:
             capillary_pressure2=np.array([PCE[j]+PCSLOPE[j]*(saturation2-liquid_residual_saturation-1.e-5) for j in range(len(P_zero))])
 
         for j in range(len(P_zero)):
-            ax3.plot(saturation1[1:],capillary_pressure1[0,1:],'k-',saturation2,capillary_pressure2[0],'k-', saturation1[1:],capillary_pressure1[j,1:],'.',saturation2,capillary_pressure2[j],'.')
+            ax3.plot(saturation1,capillary_pressure1[j],'.-',saturation2,capillary_pressure2[j],'.-')
             plt.text(0.5, 10.e3*10**(j/1.5),'P_zero='+str(P_zero[j]))
         plt.xlabel('saturation')
         plt.ylabel('capillary_pressure')
-
-        #plt.ylim(1.5,-0.1)
-        #plt.xlim()
+        plt.ylim(10,1.e10)
+        plt.xlim(-0.1,1.1)
         #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
         ax3.set_yscale('log')
      	
