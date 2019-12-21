@@ -51,3 +51,5 @@ liquid_flow_top_mmPday                  = liquid_flow_mmPday[0]
 gas_flow_top_mmPday                     = gas_flow_mmPday[0]
 vapor_adv_flow_top_mmPday               = vapor_flow_mmPday[0]
 vapor_diff_flow_top_mmPday              = vapor_diff_flow_mmPday[0]
+gas_relative_permeability               = np.array([lst.history(('p',lst.primary.row_name[i],'K(GAS)'))[1] for i in range(lst.primary.num_rows)])
+liq_relative_permeability               = np.array([lst.history(('p',lst.primary.row_name[i],'K(LIQ.)'))[1] for i in range(lst.primary.num_rows)])
