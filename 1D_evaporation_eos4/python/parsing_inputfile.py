@@ -8,7 +8,7 @@ from t2data import *
 from t2incons import *
 from mpl_toolkits.mplot3d import Axes3D
 
-liq_density_kgPm3=1000
+liquid_density_kgPm3=1000
 water_molecular_weight=0.018
 R_value=8.314
 m2mm=1000
@@ -93,12 +93,11 @@ connection_value             = np.cumsum(connection_first_distance+np.insert(con
 
 
 dat.grid.rocktype.pop('dfalt', None)
-saturation=np.logspace(-10,0,500)
+saturation=np.logspace(-10,0,150)
 capillary_pressure=np.empty(len(saturation))
 capillary_pressure[:]=np.nan
 # #--- plot SWCC and Cap. Pre. ------------------------------------	
 for i in dat.grid.rocktype:
-    #saturation=np.linspace(0,100.,200)/100
     if i== 'SAND ':
         capillarity_parameter=dat.grid.rocktype[str(i)].capillarity['parameters']
         capillarity_type=dat.grid.rocktype[str(i)].capillarity['type']
@@ -106,7 +105,7 @@ for i in dat.grid.rocktype:
         relative_permeability_type=dat.grid.rocktype[str(i)].relative_permeability['type']
         
         fig=plt.figure()
-        ax3=plt.subplot(111)
+        ax3=plt.subplot(121)
         if  capillarity_type==1:
             capillary_pressure=1*capillarity_parameter[0]*(capillarity_parameter[2]-saturation)/(capillarity_parameter[2]-capillarity_parameter[1])
             capillary_pressure[saturation<=capillarity_parameter[1]]=1*capillarity_parameter[0]
@@ -121,7 +120,7 @@ for i in dat.grid.rocktype:
             saturated_liquid_saturation=capillarity_parameter[4]
             saturation2=np.linspace(0,liquid_residual_saturation,50)
             #saturation1=np.linspace(liquid_residual_saturation,saturated_liquid_saturation,100)
-            saturation1=np.linspace(liquid_residual_saturation,1,100)
+            saturation1=np.linspace(liquid_residual_saturation+1.e-5,1,100)
             #saturation2=np.linspace(0,liquid_residual_saturation,100)
             S_star=(saturation1-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
             capillary_pressure1=np.array([1*P_zero[j]*(S_star**(-1/lamda)-1)**(1-lamda) for j in range(len(P_zero))])    
@@ -130,51 +129,61 @@ for i in dat.grid.rocktype:
             ENVG =1./(1-lamda)
             PCSLOPE = np.array([-P_zero[j]/lamda/ENVG/(saturated_liquid_saturation-liquid_residual_saturation)*(SBAR**(-1/lamda)-1)**((1-ENVG)/ENVG)*SBAR**(-(1+lamda)/lamda) for j in range(len(P_zero))])
             capillary_pressure2=np.array([PCE[j]+PCSLOPE[j]*(saturation2-liquid_residual_saturation-1.e-5) for j in range(len(P_zero))])
-
-        for j in range(len(P_zero)):
-            ax3.plot(saturation1,capillary_pressure1[j],'.-',saturation2,capillary_pressure2[j],'.-')
-            plt.text(0.5, 10.e3*10**(j/1.5),'P_zero='+str(P_zero[j]))
+        j=2
+        ax3.plot(saturation1,capillary_pressure1[j],'r.-',saturation2,capillary_pressure2[j],'.-')
+        plt.text(0.2, 10.e4*10**(j/1.5),'P_zero='+str(P_zero[j]))
         plt.xlabel('saturation')
         plt.ylabel('capillary_pressure')
         plt.ylim(10,1.e10)
         plt.xlim(-0.1,1.1)
         #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
         ax3.set_yscale('log')
-     	
-        # ax1=plt.subplot(212)
-        # if  relative_permeability_type==1:
-            # saturation=np.array([relative_permeability_parameter[0],relative_permeability_parameter[2]])
-            # liquid_relative_permeability=np.array([0,1])
-            # gas_relative_permeability=np.array([1,0])
-     
-        # if  relative_permeability_type==7:
-            # lamda=relative_permeability_parameter[0]
-            # liquid_residual_saturation=relative_permeability_parameter[1]
-            # saturated_liquid_saturation=relative_permeability_parameter[2]
-            # gas_residual_saturation=relative_permeability_parameter[3]
-            # S_star=(saturation-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
-            # S_bar=(saturation-liquid_residual_saturation)/(1-gas_residual_saturation-liquid_residual_saturation)
-            # liquid_relative_permeability=S_star**0.5*(1-(1-S_star**(1/lamda))**lamda)**2
-            # liquid_relative_permeability[saturation>=saturated_liquid_saturation]=1
-            # gas_relative_permeability=(1-S_bar)**2*(1-S_bar**2)
-            # if gas_residual_saturation==0:
-                # gas_relative_permeability=1-liquid_relative_permeability
-     
-        # ax1.plot(saturation,liquid_relative_permeability,'k-o',)
+
+        # for j in range(len(P_zero)):
+            # ax3.plot(saturation1,capillary_pressure1[j],'.-',saturation2,capillary_pressure2[j],'.-')
+            # plt.text(0.2, 10.e4*10**(j/1.5),'P_zero='+str(P_zero[j])+'; PCE=10**'+str(round(np.log10(PCE[j]),2))+'; PCSLOPE=-10**'+str(round(np.log10(-1*PCSLOPE[j]),2)))
         # plt.xlabel('saturation')
-        # plt.ylabel('liquid_relative_permeability)')
-        # plt.ylim(0,1)
-        # #plt.xlim()
+        # plt.ylabel('capillary_pressure')
+        # plt.ylim(10,1.e10)
+        # plt.xlim(-0.1,1.1)
         # #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-        # #ax1.set_yscale('log')
+        # ax3.set_yscale('log')
+     	
+        ax1=plt.subplot(122)
+        if  relative_permeability_type==1:
+            saturation=np.array([relative_permeability_parameter[0],relative_permeability_parameter[2]])
+            liquid_relative_permeability=np.array([0,1])
+            gas_relative_permeability=np.array([1,0])
+     
+        if  relative_permeability_type==7:
+            lamda=relative_permeability_parameter[0]
+            liquid_residual_saturation=relative_permeability_parameter[1]
+            saturated_liquid_saturation=relative_permeability_parameter[2]
+            gas_residual_saturation=relative_permeability_parameter[3]
+            saturation=np.append(saturation1,saturation2)          
+            S_star=(saturation-liquid_residual_saturation)/(saturated_liquid_saturation-liquid_residual_saturation)
+            S_bar=(saturation-liquid_residual_saturation)/(1-gas_residual_saturation-liquid_residual_saturation)
+            liquid_relative_permeability=S_star**0.5*(1-(1-S_star**(1/lamda))**lamda)**2
+            liquid_relative_permeability[saturation>=saturated_liquid_saturation]=1
+            gas_relative_permeability=(1-S_bar)**2*(1-S_bar**2)
+            if gas_residual_saturation==0:
+                gas_relative_permeability=1-liquid_relative_permeability
+     
+        ax1.plot(saturation,liquid_relative_permeability,'k-o',)
+        plt.xlabel('saturation')
+        plt.ylabel('liquid_relative_permeability)')
+        plt.ylim(0,1)
+        #plt.xlim()
+        #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+        #ax1.set_yscale('log')
         # ax2=ax1.twinx()
         # ax2.plot(saturation,gas_relative_permeability,'r-o',)
         # plt.xlabel('saturation')
         # plt.ylabel('gas_relative_permeability')
         # plt.ylim(0,1)
-        # #plt.xlim()
-        # #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
-        # #ax2.set_yscale('log')
+        #plt.xlim()
+        #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+        #ax2.set_yscale('log')
         # ax2.spines['right'].set_color('red')
         # ax2.yaxis.label.set_color('red')
         # ax2.tick_params(axis='y', colors='red')	

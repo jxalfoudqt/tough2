@@ -13,6 +13,7 @@ R_value=8.3145
 mPmm=1.e-3
 dayPs=1./(3600*24)
 T_kelven=273.15
+T_initial=13.0
 
 dat = t2data()
 dat.title = '1D_evaporation_eos4'
@@ -23,7 +24,6 @@ nblks = 50
 dz = [length / nblks] * nblks
 dy = dx = [0.1]
 geo = mulgrid().rectangular(dx, dy, dz)
-#geo = mulgrid().rectangular(dx, dy, dz, atmos_type=0)
 geo.write(dat.title+'.dat')
 
 # #Create TOUGH2 input data file:
@@ -37,10 +37,9 @@ dat.parameter.update(
      'texp': 2.41e-05,	
      'timestep': [1.0],
      'be': 2.334,
-     'default_incons': [101.3e3, 10.99, 25.0, None],
-     'relative_error': 1.e-5})
+     'default_incons': [101.3e3, 10.99, 13.0, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/50
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 dat.start = True
@@ -50,18 +49,19 @@ dat.multi={'num_components': 2, 'num_equations': 3, 'num_phases': 2, 'num_second
 # #Set MOPs:
 dat.parameter['option'][1] = 1
 dat.parameter['option'][7] = 0
-dat.parameter['option'][9] = 1
 dat.parameter['option'][11] = 0
 dat.parameter['option'][16] = 4
 dat.parameter['option'][19] = 2
 dat.parameter['option'][21] = 3
 
+relative_humidity=0.1
+P_bound=np.log(relative_humidity)*liquid_density_kgPm3*R_value*(T_initial+T_kelven)/water_molecular_weight
+
 # #Add another rocktype, with relative permeability and capillarity functions & parameters:
 r1 = rocktype('SAND ', nad=2, porosity=0.45,density=2650.,permeability = [2.e-12, 2.e-12, 2.e-12],conductivity=2.51,specific_heat=920)
 dat.grid.add_rocktype(r1)
-Residual_saturation=0.045
-r1.relative_permeability = {'type': 7, 'parameters': [0.627, Residual_saturation, 1., 0.054]}
-r1.capillarity = {'type': 7, 'parameters': [0.627, Residual_saturation-1.e-5, 5.e-4, 1.e8, 1.]}
+r1.relative_permeability = {'type': 7, 'parameters': [0.627, 0.045, 1., 0.054]}
+r1.capillarity = {'type': 7, 'parameters': [0.627, 0.045, 5.e-4, -P_bound, 1.]}
 	
 r2 = rocktype('BOUND', nad=2,porosity=0.99,density=2650., permeability = [2.e-12, 2.e-12, 2.e-12],conductivity=2.51,specific_heat=1.e5)
 dat.grid.add_rocktype(r2)
@@ -69,7 +69,7 @@ dat.grid.add_rocktype(r2)
 #r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
 
 r2.relative_permeability = {'type': 1, 'parameters': [0.1,0.0,1.0,0.1,]}
-r2.capillarity = {'type': 1, 'parameters': [0., 0., 1.0]}
+r2.capillarity = {'type': 1, 'parameters': [-P_bound, 0., 1.0]}
 
 bvol = 0.0
 conarea = dx[0] * dy[0]
@@ -100,17 +100,8 @@ dat.grid.blocklist[-1].ahtx=conarea
 
 # #Set initial condition:
 for i in range(len(dat.grid.blocklist)-1):
-    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, 25.0]]
-dat.incon['bdy01'] = [None, [101.3e3, 0.99, 25.0]]
-dat.incon[str(dat.grid.blocklist[1])][1][1] = 10.99
-
-# #add generator:
-flow_rate_mmPday=-5.
-flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
-gen = t2generator(name = 'INF 1', block = dat.grid.blocklist[0].name,
-                  gx = flow_rate_kgPs, type = 'COM1')
-dat.add_generator(gen)
-
+    dat.incon[str(dat.grid.blocklist[i])] = [None, [101.3e3+dat.grid.blocklist[i].centre[2]*(-1)*liquid_density_kgPm3*dat.parameter['gravity'], 10.01, T_initial]]
+dat.incon['bdy01'] = [None, [101.3e3, 0.9999, T_initial]]
 
 # #--- write TOUGH2 input file ------------------------------------	
 dat.grid.blocklist.insert(0,dat.grid.blocklist[-1])
