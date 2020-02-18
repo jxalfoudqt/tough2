@@ -18,34 +18,33 @@ T_kelven=273.15
 
 # #--- read TOUGH2 input file ------------------------------------	
 dat = t2data('rf1')
-# dat.grid.write_vtk('sam6_geo.vtu')
 
 # #--- plot generated mesh ------------------------------------	
-    
-# element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
+if dat.meshmaker[0][0]=='xyz':
+    length_x = dat.meshmaker[0][1][1]['del']*dat.meshmaker[0][1][1]['no']
+    nblks_x = dat.meshmaker[0][1][1]['no']
+    length_y = dat.meshmaker[0][1][2]['del']*dat.meshmaker[0][1][2]['no']
+    nblks_y = dat.meshmaker[0][1][2]['no']
+    length_z = dat.meshmaker[0][1][3]['del']*dat.meshmaker[0][1][3]['no']
+    nblks_z = dat.meshmaker[0][1][3]['no']
+    dx = [length_x / nblks_x] * nblks_x
+    dy = [length_y / nblks_y] * nblks_y
+    dz = [length_z / nblks_z] * nblks_z
+    geo = mulgrid().rectangular(dx, dy, dz)
+    dat.grid = t2grid().fromgeo(geo)
 
-# connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
-# connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
-# element_value             = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
-# connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
+element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
 
-# geo = mulgrid().rectangular(element_coordinate[:,0], -2*np.array([element_coordinate[0,1]]), -2*np.array([element_coordinate[0,2]]))
-# geo.write_vtk('geom.vtk')
-
-
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
-# ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=30, c='r', marker='.')
-# ax.scatter(element_coordinate[0,0], element_coordinate[0,1], element_coordinate[0,2], s=10, c='b', marker='.')
-# #ax.scatter(element_coordinate[-1,0], element_coordinate[-1,1], element_coordinate[-1,2], s=10, c='b', marker='^')
-# ax.set_xlabel('X Label')
-# ax.set_ylabel('Y Label')
-# ax.set_zlabel('Z Label')
-# #ax.set_xscale('log')
-# fig.suptitle('mesh_element')
-# plt.rcParams.update({'font.size': 10})
-# #fig.tight_layout()
-# plt.savefig("generated_mesh_grid.png",dpi=300) 
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=90, c='r', marker='s')
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+fig.suptitle('mesh_element')
+plt.rcParams.update({'font.size': 10})
+#fig.tight_layout()
+plt.savefig("generated_mesh_grid.png",dpi=300) 
 
 # initial_condition=np.array([dat.incon[str(j)][1] for j in dat.grid.blocklist])
 # initial_porosity=np.array([dat.incon[str(j)][0] for j in dat.grid.blocklist])
