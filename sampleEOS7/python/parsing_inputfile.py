@@ -8,83 +8,81 @@ from t2data import *
 from t2incons import *
 from mpl_toolkits.mplot3d import Axes3D
 
-# liq_density_kgPm3=1000
-# water_molecular_weight=0.018
-# R_value=8.314
-# m2mm=1000
-# day2s=3600*24
-# T_kelven=273.15
-
-# dat.title = 'dp_model_flow'
+liquid_density_kgPm3=1000
+brine_density_kgPm3=1185.1
+water_molecular_weight=0.018
+R_value=8.314
+m2mm=1000
+day2s=3600*24
+T_kelven=273.15
 
 # #--- read TOUGH2 input file ------------------------------------	
-# dat = t2data(dat.title)
+dat = t2data('rf1')
 # dat.grid.write_vtk('sam6_geo.vtu')
 
 # #--- plot generated mesh ------------------------------------	
     
-element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
+# element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
 
-connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
-connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
-element_value                = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
-connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
-initial_condition            = np.array([dat.incon[str(j)][1] for j in dat.grid.blocklist])
+# connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
+# connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
+# element_value             = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
+# connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
 
 # geo = mulgrid().rectangular(element_coordinate[:,0], -2*np.array([element_coordinate[0,1]]), -2*np.array([element_coordinate[0,2]]))
 # geo.write_vtk('geom.vtk')
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=2, c='r', marker='.')
-ax.scatter(element_coordinate[:,0][initial_condition[:,0]==initial_condition[0,0]], element_coordinate[:,1][initial_condition[:,0]==initial_condition[0,0]], element_coordinate[:,2][initial_condition[:,0]==initial_condition[0,0]], s=30, c='b', marker='^')
-#ax.scatter(element_coordinate[0,0], element_coordinate[0,1], element_coordinate[0,2], s=10, c='b', marker='.')
-#ax.scatter(element_coordinate[-1,0], element_coordinate[-1,1], element_coordinate[-1,2], s=10, c='b', marker='^')
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_zlabel('Z Label')
-#ax.set_xscale('log')
-fig.suptitle('mesh_element')
-plt.rcParams.update({'font.size': 10})
-#fig.tight_layout()
-plt.savefig("generated_mesh_grid.png",dpi=300) 
 
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=30, c='r', marker='.')
+# ax.scatter(element_coordinate[0,0], element_coordinate[0,1], element_coordinate[0,2], s=10, c='b', marker='.')
+# #ax.scatter(element_coordinate[-1,0], element_coordinate[-1,1], element_coordinate[-1,2], s=10, c='b', marker='^')
+# ax.set_xlabel('X Label')
+# ax.set_ylabel('Y Label')
+# ax.set_zlabel('Z Label')
+# #ax.set_xscale('log')
+# fig.suptitle('mesh_element')
+# plt.rcParams.update({'font.size': 10})
+# #fig.tight_layout()
+# plt.savefig("generated_mesh_grid.png",dpi=300) 
 
+# initial_condition=np.array([dat.incon[str(j)][1] for j in dat.grid.blocklist])
 # initial_porosity=np.array([dat.incon[str(j)][0] for j in dat.grid.blocklist])
 
 # fig=plt.figure()
-# # ax1=plt.subplot(141)
-# # ax1.plot(initial_porosity[:],element_value,'b-')
-# # plt.xlabel('Por.')
-# # plt.ylabel('x (m)')
-# # # plt.ylabel('high (m)')
-# # plt.ylim(1.5,-0.1)
-# # # plt.xlim(np.nanmin(initial_porosity),np.nanmax(initial_porosity))
-# # #ax1.set_yscale('log')
+# ax1=plt.subplot(141)
+# ax1.plot(initial_porosity[:],element_value,'b-')
+# plt.xlabel('Por.')
+# plt.ylabel('x (m)')
+# # plt.ylabel('high (m)')
+# plt.ylim(7,1.5)
+# # plt.xlim(np.nanmin(initial_porosity),np.nanmax(initial_porosity))
+# #ax1.set_yscale('log')
 
-# ax2=plt.subplot(131)
+# ax2=plt.subplot(142)
 # ax2.plot(initial_condition[:,0]/1000,element_value,'b-')
 # plt.xlabel('Gas Pre. (Kpa)')
 # # plt.ylabel('high (m)')
-# plt.ylim(1.5,-0.1)
+# plt.ylim(7,1.5)
 # # plt.xlim(np.nanmin(Liq_saturation)*100,np.nanmax(Liq_saturation)*100)
 # #plt.yscale('log')
 
-# ax3=plt.subplot(132)
-# ax3.plot(100-(initial_condition[:,1]-10)*100,element_value,'b-')
+# ax3=plt.subplot(143)
+# ax3.plot(100-initial_condition[1:,1]*100,element_value[1:],'b-')
 # plt.xlabel('Liq. Sat. (%)')
 # # plt.ylabel('high (m)')
-# plt.ylim(1.5,-0.1)
+# plt.ylim(7,1.5)
 # # plt.xlim(np.nanmin(Gas_flow),np.nanmax(Gas_flow))	
 # # plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
 # #ax3.set_yscale('log')
 
-# ax4=plt.subplot(133)
-# ax4.plot(initial_condition[:,2],element_value,'b-')
-# plt.xlabel('Tem. (Degree)')
+# ax4=plt.subplot(144)
+# ax4.plot(initial_condition[:,2]/1000,element_value,'b-')
+# plt.xlabel('Air Pre. (%)')
 # # plt.ylabel('high (m)')
-# plt.ylim(1.5,-0.1)
-# plt.xlim(12.95, 13.05)	
+# plt.ylim(7,1.5)
+# # plt.xlim(np.nanmin(Gas_flow),np.nanmax(Gas_flow))	
 # # plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))    
 # #ax4.set_yscale('log')
 
