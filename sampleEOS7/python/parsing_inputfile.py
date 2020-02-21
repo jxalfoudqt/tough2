@@ -35,17 +35,35 @@ if dat.meshmaker[0][0]=='xyz':
 
 element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=90, c='r', marker='s')
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_zlabel('Z Label')
-fig.suptitle('mesh_element')
-plt.rcParams.update({'font.size': 10})
-#fig.tight_layout()
-plt.savefig("generated_mesh_grid.png",dpi=300) 
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# ax.scatter(element_coordinate[:,0], element_coordinate[:,1], element_coordinate[:,2], s=90, c='r', marker='s')
+# ax.set_xlabel('X Label')
+# ax.set_ylabel('Y Label')
+# ax.set_zlabel('Z Label')
+# fig.suptitle('mesh_element')
+# plt.rcParams.update({'font.size': 10})
+# #fig.tight_layout()
+# plt.savefig("generated_mesh_grid.png",dpi=300) 
 
+i=1
+while i<nblks_z+1:
+    j=1
+    while j<nblks_y+1:
+        k=1
+        while k<nblks_x+1:
+            dat.grid.blocklist[(k-1)+(j-1)*5+(i-1)*5*5]='A'+str(i)+str(j)+str(0)+str(k)
+            k+=1
+        j+=1
+    i+=1
+
+
+# for i in range(len(dat.grid.blocklist)):
+    # dat.incon[str(dat.grid.blocklist[i])] = [None, dat.parameter['default_incons']]
+	
+# for i in range(5):
+    # dat.incon['A110'+str(i+1)] = [None, incon_origin['A1101'][1]]
+	
 # initial_condition=np.array([dat.incon[str(j)][1] for j in dat.grid.blocklist])
 # initial_porosity=np.array([dat.incon[str(j)][0] for j in dat.grid.blocklist])
 
