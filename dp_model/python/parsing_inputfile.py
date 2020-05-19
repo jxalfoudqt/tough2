@@ -24,11 +24,9 @@ from mpl_toolkits.mplot3d import Axes3D
 # #--- plot generated mesh ------------------------------------	
     
 element_coordinate           = np.array([j.centre for j in dat.grid.blocklist])
+element_value_x              = np.array([element_coordinate[i][0] for i in range(len(element_coordinate)-2)])
+element_value_z              = np.array([element_coordinate[i][2] for i in range(len(element_coordinate)-2)])
 
-connection_first_distance    = np.array([blk.distance[0] for blk in dat.grid.connectionlist])
-connection_second_distance   = np.array([blk.distance[1] for blk in dat.grid.connectionlist])
-element_value                = np.cumsum(np.insert(connection_first_distance+connection_second_distance,0,0))
-connection_value             = np.cumsum(connection_first_distance+np.insert(connection_second_distance[:-1], 0, 0)) 
 initial_condition            = np.array([dat.incon[str(j)][1] for j in dat.grid.blocklist])
 
 # geo = mulgrid().rectangular(element_coordinate[:,0], -2*np.array([element_coordinate[0,1]]), -2*np.array([element_coordinate[0,2]]))

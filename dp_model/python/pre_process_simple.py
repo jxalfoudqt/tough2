@@ -21,29 +21,29 @@ dat = t2data()
 dat.title = 'dp_model_flow'
 
 # #--- set up the model ---------------------------------
-length_x = 1.
-nblks_x = 10
-length_z = 0.5
+length_x = 50.
+nblks_x = 50
+length_z = 5.
 nblks_z = 5
 dx = [length_x / nblks_x] * nblks_x
 dz = [length_z / nblks_z] * nblks_z
-dy = [0.1]
+dy = [1.0]
 geo = mulgrid().rectangular(dx, dy, dz)
 geo.write(dat.title+'.dat')
 
 # #Create TOUGH2 input data file:
 dat.grid = t2grid().fromgeo(geo)
 dat.parameter.update(
-    {'max_timesteps': 1.e3,
+    {'max_timesteps': 7.e3,
      'const_timestep': -1,
-     'tstop': 10*24*3600,
+     'tstop': 1000*24*3600,
      'gravity': 9.81,
      'print_level': 2,
      'texp': 1.8,	
      'timestep': [1.0],
      'default_incons': [P_initial, 0, 10.99, T_initial, None]})
 	 
-dat.parameter['print_interval']=dat.parameter['max_timesteps']/50
+dat.parameter['print_interval']=dat.parameter['max_timesteps']/20
 dat.parameter['max_timestep']=dat.parameter['tstop']/dat.parameter['max_timesteps']
 
 # #Set MOPs:
@@ -55,7 +55,7 @@ dat.parameter['option'][19] = 2
 dat.parameter['option'][21] = 3
 
 dat.start = True
-#dat.diffusion=[[2.13e-5,     0.e-8],   [2.13e-5,     0.e-8]]
+#dat.diffusion=[[2.13e-5,1.e-9,0.e-8],   [2.13e-5,1.e-9,0.e-8]]
 dat.multi={'num_components': 3, 'num_equations': 4, 'num_phases': 2, 'num_secondary_parameters': 6}
 dat.selection={'float':[None],'integer':[2]}
 
@@ -85,30 +85,29 @@ for blk in dat.grid.blocklist:
 
 
 # #add boundary condition block at each end:
-b1 = t2block('bdy01', bvol, r2)
-b1.volume=1.e50
-dat.grid.add_block(b1)
 for i in range(5):
-    con1 = t2connection([b1, dat.grid.blocklist[i*10],b1],
-                    distance = [condist,0.5*dx[0]], area = conarea, direction=1)
+    b1 = t2block('bdy'+str(i+1), bvol, r2)
+    b1.volume=1.e50
+    dat.grid.add_block(b1)
+    con1= t2connection([b1, dat.grid.blocklist[i*nblks_x],b1],distance = [condist,0.5*dx[0]], area = conarea, direction=1)
     dat.grid.add_connection(con1)
-
-dat.grid.connectionlist[-1].dircos=0
-dat.grid.blocklist[-1].ahtx=conarea
-
-b2 = t2block('bdy02', bvol, dat.grid.rocktype['BOUND'])
-b2.volume=1.e50
-dat.grid.add_block(b2)
+    dat.grid.connectionlist[-1].dircos=0
+    dat.grid.blocklist[-1].ahtx=conarea
+	
 for i in range(5):
-    con2 = t2connection([dat.grid.blocklist[9+i*10], b2],
-                    distance = [0.5*dx[nblks_x-1], condist], area = conarea, direction=1)
+    b2 = t2block('bdy'+str(i+6), bvol, dat.grid.rocktype['BOUND'])
+    b2.volume=1.e50
+    dat.grid.add_block(b2)
+    con2 = t2connection([dat.grid.blocklist[nblks_x-1+i*nblks_x], b2],distance = [0.5*dx[nblks_x-1], condist], area = conarea, direction=1)
     dat.grid.add_connection(con2)
-dat.grid.connectionlist[-1].dircos=0
-dat.grid.blocklist[-1].ahtx=conarea
+    dat.grid.connectionlist[-1].dircos=0
+    dat.grid.blocklist[-1].ahtx=conarea
 
-# #Set initial condition:
-dat.incon[str(dat.grid.blocklist[-2])] = [None, [P_initial*1.2, 0, 10.01, T_initial]]
-dat.incon[str(dat.grid.blocklist[-1])] = [None, [P_initial*1.1, 1, 10.01, T_initial]]
+#Set initial condition:
+for i in range(5):
+    dat.incon[str(dat.grid.blocklist[len(dat.grid.blocklist)-5+i])] = [None, [P_initial+brine_density_kgPm3*dat.parameter['gravity']*dat.grid.blocklist[nblks_x-1+i*nblks_x].centre[2]*(-1), 1, 10.01, T_initial]]
+for i in range(5):	  
+    dat.incon[str(dat.grid.blocklist[len(dat.grid.blocklist)-10+i])] = [None, [P_initial+liquid_density_kgPm3*dat.parameter['gravity']*dat.grid.blocklist[i*nblks_x].centre[2]*(-1), 0, 10.01, T_initial]]
 
 # # #add generator:
 # flow_rate_mmPday=-5

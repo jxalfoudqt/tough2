@@ -185,4 +185,4 @@ while i<nblks_z+1:
     # fig.suptitle(dat.grid.rocktype[str(i)])
     # plt.rcParams.update({'font.size': 10})
     # #fig.tight_layout()
-    # plt.savefig("Capillary_&_SWCC_for_"+str(i)+".png",dpi=300) 
+    # plt.savefig("Capillary_&_SWCC_for_"+str(i)+".png",dpi=300)
