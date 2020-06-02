@@ -30,7 +30,7 @@ liq_density_xt_mtx_kgPm3          = np.array([lst.history(('e',i,'DL'  ))[1] for
 gas_flow_xt_mtx_kgPs           = -np.array([lst.history(('c',i,'FLO(GAS)'))[1] for i in lst.connection.row_name])
 vapor_diff_flow_xt_mtx_kgPs    = -np.array([lst.history(('c',i,'VAPDIF'))[1] for i in lst.connection.row_name])    # c means connection, but why negative? negative may related to BETAX, which is -1 in this case
 liquid_flow_xt_mtx_kgPs        = -np.array([lst.history(('c',i,'FLO(LIQ.)'))[1] for i in lst.connection.row_name])
-vapor_adv_xt_mtx_kgPs          = vapor_mass_fraction_in_gas_xt_mtx*gas_flow_xt_mtx_kgPs
+vapor_adv_xt_mtx_kgPs          = vapor_mass_fraction_in_gas_xt_mtx[1:]*gas_flow_xt_mtx_kgPs
   
 print('Check mass balance\n')  
 # ---Mass Balance---
@@ -42,10 +42,17 @@ vapor_mass_kg                     = np.sum(vapor_mass_element_kg,axis=1)
 total_water_mass_kg               = liquid_mass_kg+vapor_mass_kg                                    
 water_mass_change_over_time_kg    = np.diff(total_water_mass_kg)
 
-liquid_flow_top1_kgPs             = liquid_flow_xt_mtx_kgPs[0]
-vapor_flow_top1_kgPs              = vapor_adv_xt_mtx_kgPs[0]  
-vapor_diff_flow_top1_kgPs         = vapor_diff_flow_xt_mtx_kgPs[0]
-total_water_net_flux_kgPs         = -liquid_flow_top1_kgPs-vapor_diff_flow_top1_kgPs-vapor_flow_top1_kgPs
-water_amount_change_over_time_kg  = total_water_net_flux_kgPs[1:]*np.diff(lst.times)
-print('water_mass_change_over_time_kg='+str(np.sum(water_mass_change_over_time_kg)))
-print('water_amount_change_over_time_kg='+str(np.sum(water_amount_change_over_time_kg)))
+liquid_flow_top1_kgPs                      = liquid_flow_xt_mtx_kgPs[0]
+vapor_flow_top1_kgPs                       = vapor_adv_xt_mtx_kgPs[0]  
+vapor_diff_flow_top1_kgPs                  = vapor_diff_flow_xt_mtx_kgPs[0]
+total_water_net_flux_kgPs                  = liquid_flow_top1_kgPs+vapor_diff_flow_top1_kgPs+vapor_flow_top1_kgPs
+liquid_flow_amount_change_over_time_kg     = -liquid_flow_top1_kgPs[1:]*np.diff(lst.times)
+vapor_diff_flow_amount_change_over_time_kg = -vapor_diff_flow_top1_kgPs[1:]*np.diff(lst.times)
+vapor_flow_amount_change_over_time_kg      = -vapor_flow_top1_kgPs[1:]*np.diff(lst.times)
+water_amount_change_over_time_kg           = -total_water_net_flux_kgPs[1:]*np.diff(lst.times)
+
+print('water_mass_change_over_time_kg              ='+str(np.sum(water_mass_change_over_time_kg)))
+print('liquid_water_mass_change_over_time_kg       ='+str(np.sum(liquid_flow_amount_change_over_time_kg)))
+print('vapor_diff_water_amount_change_over_time_kg ='+str(np.sum(vapor_diff_flow_amount_change_over_time_kg)))
+print('vapor_flow_water_amount_change_over_time_kg ='+str(np.sum(vapor_flow_amount_change_over_time_kg)))
+print('water_amount_change_over_time_kg            ='+str(np.sum(water_amount_change_over_time_kg)))

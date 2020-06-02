@@ -46,7 +46,7 @@ inp.parameter.update(
      'be'             : 2.334,
      'default_incons' : [101.3e3, 10.99, 13.0, None],
      'relative_error' : 1.e-6,
-     'print_interval' : max_no_time_steps/20,
+     'print_interval' : max_no_time_steps/max_no_time_steps,
      'max_timestep'   : simulation_time_s/max_no_time_steps  # the maximum length of time step in second
      })
 # #Set MOPs:
