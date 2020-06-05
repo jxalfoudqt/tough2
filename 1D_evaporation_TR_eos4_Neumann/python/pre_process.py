@@ -38,7 +38,7 @@ inp.parameter.update(
      'tstop'          : simulation_time_s,
      'gravity'        : 9.81,
      'print_level'    : 2,                                   #-3 SO far TR can not handle print level >2
-     'texp'           : 2.41e-05,                            # default vapour diffusion coefficient. note this is not 1e-9m2/s for solute
+     'texp'           : 1.8,                            # default vapour diffusion coefficient. note this is not 1e-9m2/s for solute
      'timestep'       : [1.0],
      'be'             : 2.334,
      'default_incons' : [p_atm_pa, 10.99, T_init_c, None],
