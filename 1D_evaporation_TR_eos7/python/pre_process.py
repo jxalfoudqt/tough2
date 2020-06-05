@@ -17,7 +17,7 @@ sPday                       = 3600*24.
 T_init_c                    = 13.0
 T_kelven                    = 273.15
 p_atm_pa                    = 101.3e3
-simulation_time_s           = 100*3600*24
+simulation_time_s           = 60*3600*24
 max_no_time_steps           = 3000 
 brine_density_kgPm3         = 1185.1
 
@@ -62,11 +62,12 @@ inp.start = True
 
 # #Set diffusion:
 inp.diffusion=[[2.13e-5,     0.e-8],
+               [  0.e-8,     0.e-8],
                [2.13e-5,     0.e-8]]
 			   
 # #Set multi choice:				   
 inp.multi={'num_components'           : 3, 
-           'num_equations'            : 4, 
+           'num_equations'            : 3, 
            'num_phases'               : 2, 
            'num_secondary_parameters' : 8}
 
@@ -134,8 +135,8 @@ for i in range(len(inp.grid.blocklist)-1):
 	    [None, [p_atm_pa-inp.grid.blocklist[i+1].centre[2]*liquid_density_kgPm3*inp.parameter['gravity'], 0.2, 10.01, T_init_c]]
 inp.incon['bdy01'] = [None, [p_atm_pa, 0.0001, 0.9999, T_init_c]]
 
-# # #set react:                                                            
-# inp.add_react(mopr=[None,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])                    # only run tough2 no toughreact
+# #set react:                                                            
+inp.add_react(mopr=[None,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])                    # only run tough2 no toughreact
 
 
 # #--- write TOUGH2 input file (obsolete)------------------------------------	

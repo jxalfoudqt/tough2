@@ -28,26 +28,26 @@ con_depth_m                = -1*(element_z_ay_all[1:]-connection_first_distance)
 
 # #read element column
 #lst.element.column_name
-#['P', 'T', 'SG', 'SL', 'XAIRG', 'XAIRL', 'PAIR', 'PCAP', 'DG', 'DL']
+#['P', 'T', 'SG', 'SL', 'XBRINE(LIQ)', 'XAIRG', 'XAIRL', 'PCAP', 'DG', 'DL', 'POROSITY', 'LOG(K)']
 # XAIRG   ----   mass fraction of air in gas phase
 # XAIRL   ----   mass fraction of air in liquid phase  ???? what does this mean?
 # PAIR    ----   parial pressure of air ( i think it is air pressure)
 # PCAP    ----   capillary pressure
 # DL      ----   liquid density
 # DG      ----   gas density
-gas_pressure_xt_mtx_pa            = np.array([lst.history(('e',i,'P'   ))[1] for i in lst.element.row_name])
-temperature_degree_xt_mtx         = np.array([lst.history(('e',i,'T'   ))[1] for i in lst.element.row_name])
-gas_saturation_xt_mtx             = np.array([lst.history(('e',i,'SG'  ))[1] for i in lst.element.row_name])
-liq_saturation_xt_mtx             = np.array([lst.history(('e',i,'SL'  ))[1] for i in lst.element.row_name])
-vapor_mass_fraction_in_gas_xt_mtx = 1-np.array([lst.history(('e',i,'XAIRG'))[1] for i in lst.element.row_name])
-air_pressure_xt_mtx_pa            = np.array([lst.history(('e',i,'PAIR'))[1] for i in lst.element.row_name])
-capillary_pressure_xt_mtx_pa      = np.array([lst.history(('e',i,'PCAP'))[1] for i in lst.element.row_name])
-gas_density_xt_mtx_kgPm3          = np.array([lst.history(('e',i,'DG' ) )[1] for i in lst.element.row_name])          # two brackets is needed!
-liq_density_xt_mtx_kgPm3          = np.array([lst.history(('e',i,'DL'  ))[1] for i in lst.element.row_name])
+gas_pressure_xt_mtx_pa                =   np.array([lst.history(('e',i,'P'   ))[1] for i in lst.element.row_name])
+temperature_degree_xt_mtx             =   np.array([lst.history(('e',i,'T'   ))[1] for i in lst.element.row_name])
+gas_saturation_xt_mtx                 =   np.array([lst.history(('e',i,'SG'  ))[1] for i in lst.element.row_name])
+liq_saturation_xt_mtx                 =   np.array([lst.history(('e',i,'SL'  ))[1] for i in lst.element.row_name])
+vapor_mass_fraction_in_gas_xt_mtx     = 1-np.array([lst.history(('e',i,'XAIRG'))[1] for i in lst.element.row_name])
+brine_mass_fraction_in_liquid_xt_mtx  =   np.array([lst.history(('e',i,'XBRINE(LIQ)'))[1] for i in lst.element.row_name])
+capillary_pressure_xt_mtx_pa          =   np.array([lst.history(('e',i,'PCAP'))[1] for i in lst.element.row_name])
+gas_density_xt_mtx_kgPm3              =   np.array([lst.history(('e',i,'DG' ) )[1] for i in lst.element.row_name])          # two brackets is needed!
+liq_density_xt_mtx_kgPm3              =   np.array([lst.history(('e',i,'DL'  ))[1] for i in lst.element.row_name])
 
 # #read connection column
 #lst.connection.column_name
-#['FLOH', 'FLOH/FLOF', 'FLOF', 'FLO(GAS)', 'VAPDIF', 'FLO(LIQ.)', 'VEL(GAS)', 'VEL(LIQ.)']
+#['FLOH', 'FLOH/FLOF', 'FLOF', 'FLO(BRINE)', 'FLO(GAS)', 'VAPDIF', 'FLO(LIQ.)', 'VEL(GAS)', 'VEL(LIQ.)']
 gas_flow_xt_mtx_kgPs           = -np.array([lst.history(('c',i,'FLO(GAS)'))[1] for i in lst.connection.row_name])
 vapor_diff_flow_xt_mtx_kgPs    = -np.array([lst.history(('c',i,'VAPDIF'))[1] for i in lst.connection.row_name])    # c means connection, but why negative? negative may related to BETAX, which is -1 in this case
 liquid_flow_xt_mtx_kgPs        = -np.array([lst.history(('c',i,'FLO(LIQ.)'))[1] for i in lst.connection.row_name])
