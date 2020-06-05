@@ -14,7 +14,7 @@ cwd=os.getcwd()
 inp_path=os.path.join(os.getcwd(),inp.title)
 
 t = time.time()
-os.system(' tough2 -to '+inp.title[:4]+'.out '+inp.title+' 4')
+os.system(' tough2 -to '+inp.title[:4]+'.out '+inp.title+' 7')
 #os.system(' itough2 -tough2 '+inp.title+'.listing '+inp.title+' 4')
 #os.system('treactv2087_eos4_gf')
 #os.system('tr2.087_eos4_lnx')

@@ -8,18 +8,18 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 # #--- set up variables ---------------------------------
-liquid_density_kgPm3   = 1000
-water_molecular_weight = 0.018
-R_value                = 8.3145
-mPmm                   = 1.e-3
-dayPs                  = 1./(3600*24)
-sPday                  = 3600*24.
-T_init_c               = 13.0
-T_kelven               = 273.15
-p_atm_pa               = 101.3e3
-simulation_time_s      = 100*3600*24
-max_no_time_steps      = 1000 
-
+liquid_density_kgPm3        = 1000
+water_molecular_weight      = 0.018
+R_value                     = 8.3145
+mPmm                        = 1.e-3
+dayPs                       = 1./(3600*24)
+sPday                       = 3600*24.
+T_init_c                    = 13.0
+T_kelven                    = 273.15
+p_atm_pa                    = 101.3e3
+simulation_time_s           = 100*3600*24
+max_no_time_steps           = 3000 
+brine_density_kgPm3         = 1185.1
 
 # #--- set up the title ---------------------------------
 inp       = t2data()
@@ -40,13 +40,13 @@ inp.parameter.update(
      'const_timestep' : -1,
      'tstop'          : simulation_time_s,
      'gravity'        : 9.81,
-     'print_level'    : -3,
-     'texp'           : 2.41e-05,	
+     'print_level'    : 2,
+     'texp'           : 1.8,	
      'timestep'       : [1.0],
      'be'             : 2.334,
-     'default_incons' : [101.3e3, 10.99, 13.0, None],
+     'default_incons' : [p_atm_pa, 0, 10.99, T_init_c, None],
      'relative_error' : 1.e-6,
-     'print_interval' : max_no_time_steps/max_no_time_steps,
+     'print_interval' : max_no_time_steps/20,
      'max_timestep'   : simulation_time_s/max_no_time_steps  # the maximum length of time step in second
      })
 # #Set MOPs:
@@ -65,10 +65,13 @@ inp.diffusion=[[2.13e-5,     0.e-8],
                [2.13e-5,     0.e-8]]
 			   
 # #Set multi choice:				   
-inp.multi={'num_components'           : 2, 
-           'num_equations'            : 3, 
+inp.multi={'num_components'           : 3, 
+           'num_equations'            : 4, 
            'num_phases'               : 2, 
            'num_secondary_parameters' : 8}
+
+# # #Set SELEC:   
+inp.selection={'float':[None],'integer':[2]}
 
 # # #Set TIMES: 
 # inp.output_times = {'num_times_specified': int(simulation_time_s*dayPs),
@@ -128,8 +131,8 @@ inp.grid.connectionlist.insert(0,con1)
 # #Set initial condition:
 for i in range(len(inp.grid.blocklist)-1):
     inp.incon[str(inp.grid.blocklist[i+1])] = \
-	    [None, [p_atm_pa+inp.grid.blocklist[i+1].centre[2]*(-1)*liquid_density_kgPm3*inp.parameter['gravity'], 10.01, T_init_c]]
-inp.incon['bdy01'] = [None, [p_atm_pa, 0.9999, T_init_c]]
+	    [None, [p_atm_pa-inp.grid.blocklist[i+1].centre[2]*liquid_density_kgPm3*inp.parameter['gravity'], 0.5, 10.01, T_init_c]]
+inp.incon['bdy01'] = [None, [p_atm_pa, 0.0001, 0.9999, T_init_c]]
 
 # # #set react:                                                            
 # inp.add_react(mopr=[None,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])                    # only run tough2 no toughreact

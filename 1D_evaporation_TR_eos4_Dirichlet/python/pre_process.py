@@ -41,7 +41,7 @@ inp.parameter.update(
      'tstop'          : simulation_time_s,
      'gravity'        : 9.81,
      'print_level'    : -3,
-     'texp'           : 2.41e-05,	
+     'texp'           : 1.8,	
      'timestep'       : [1.0],
      'be'             : 2.334,
      'default_incons' : [101.3e3, 10.99, 13.0, None],
