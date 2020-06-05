@@ -131,7 +131,7 @@ inp.grid.connectionlist.insert(0,con1)
 # #Set initial condition:
 for i in range(len(inp.grid.blocklist)-1):
     inp.incon[str(inp.grid.blocklist[i+1])] = \
-	    [None, [p_atm_pa-inp.grid.blocklist[i+1].centre[2]*liquid_density_kgPm3*inp.parameter['gravity'], 0.5, 10.01, T_init_c]]
+	    [None, [p_atm_pa-inp.grid.blocklist[i+1].centre[2]*liquid_density_kgPm3*inp.parameter['gravity'], 0.2, 10.01, T_init_c]]
 inp.incon['bdy01'] = [None, [p_atm_pa, 0.0001, 0.9999, T_init_c]]
 
 # # #set react:                                                            
