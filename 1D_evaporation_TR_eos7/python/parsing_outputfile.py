@@ -49,14 +49,18 @@ liq_density_xt_mtx_kgPm3              =   np.array([lst.history(('e',i,'DL'  ))[
 #lst.connection.column_name
 #['FLOH', 'FLOH/FLOF', 'FLOF', 'FLO(BRINE)', 'FLO(GAS)', 'VAPDIF', 'FLO(LIQ.)', 'VEL(GAS)', 'VEL(LIQ.)']
 gas_flow_xt_mtx_kgPs           = -np.array([lst.history(('c',i,'FLO(GAS)'))[1] for i in lst.connection.row_name])
-vapor_diff_flow_xt_mtx_kgPs    = -np.array([lst.history(('c',i,'VAPDIF'))[1] for i in lst.connection.row_name])    # c means connection, but why negative? negative may related to BETAX, which is -1 in this case
+#vapor_diff_flow_xt_mtx_kgPs    = -np.array([lst.history(('c',i,'VAPDIF'))[1] for i in lst.connection.row_name])    # c means connection, but why negative? negative may related to BETAX, which is -1 in this case
 liquid_flow_xt_mtx_kgPs        = -np.array([lst.history(('c',i,'FLO(LIQ.)'))[1] for i in lst.connection.row_name])
-                              
+brine_flow_xt_mtx_kgPs         = -np.array([lst.history(('c',i,'FLO(BRINE)'))[1] for i in lst.connection.row_name])
+                             
+                           
 # #unit change                
 gas_flow_xt_mtx_mmPday         = gas_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(gas_density_xt_mtx_kgPm3[1:]+gas_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs 
-vapor_diff_flow_xt_mtx_mmPday  = vapor_diff_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
+#vapor_diff_flow_xt_mtx_mmPday  = vapor_diff_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
 liquid_flow_xt_mtx_mmPday      = liquid_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
-                              
+brine_flow_xt_mtx_mmPday       = brine_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
+
+                             
 # gas_adv_velocity_mPs         = -1*np.array([lst.history(('c',lst.connection.row_name[i],'VEL(GAS)'))[1] for i in range(lst.connection.num_rows)])
 # gas_adv_velocity_kgPs        = gas_adv_velocity_mPs*gas_density_kgPm3[1:]*dat.grid.connectionlist[0].area*dat.grid.rocktype['SAND '].porosity
 # gas_adv_velocity_mmPday      = gas_adv_velocity_mPs*dat.grid.rocktype['SAND '].porosity/mPmm/dayPs 
@@ -73,11 +77,12 @@ vapor_adv_xt_mtx_mmPday       = vapor_mass_fraction_in_gas_xt_mtx[1:]*gas_flow_x
 vapor_adv_xt_mtx_kgPs         = vapor_mass_fraction_in_gas_xt_mtx[1:]*gas_flow_xt_mtx_kgPs
                               
 liquid_flow_top_mmPday        = liquid_flow_xt_mtx_mmPday[0]
+brine_flow_top_mmPday         = brine_flow_xt_mtx_mmPday[0]
 gas_flow_top_mmPday           = gas_flow_xt_mtx_mmPday[0]
 vapor_adv_top_mmPday          = vapor_adv_xt_mtx_mmPday[0]
-vapor_diff_flow_top_mmPday    = vapor_diff_flow_xt_mtx_mmPday[0]
+#vapor_diff_flow_top_mmPday    = vapor_diff_flow_xt_mtx_mmPday[0]
                  
-water_flow_top_mmPday       = liquid_flow_top_mmPday+vapor_adv_top_mmPday+vapor_diff_flow_top_mmPday
+water_flow_top_mmPday       = liquid_flow_top_mmPday+vapor_adv_top_mmPday       #+vapor_diff_flow_top_mmPday
 cumsum_water_flow_top_mm    = np.cumsum(water_flow_top_mmPday*np.insert(np.diff(lst.times),0,lst.times[0])*dayPs)
 
 # # #read generation column 

@@ -32,27 +32,41 @@ while i<lst.num_times:
     fig.subplots_adjust(hspace=.3,wspace=.2)
     #fig.subplots_adjust(left=0.07, right=0.93, top=0.93, bottom=0.05)
     ax3=plt.subplot(441)
-    ax3.plot(temperature_degree_xt_mtx[:,i],ele_depth_m  ,'r1-')
+    ax3.plot(brine_mass_fraction_in_liquid_xt_mtx[:,i]*100,ele_depth_m  ,'k1-')
     plt.tick_params(
                 axis='y',         
                 which='both',    
-                labelleft=True,
+                labelleft=False,
                 labelright=False,
                 right=True
                 )
-    plt.xlabel('Temperature \n(Celsius)')
+    plt.xlabel('brine_mass_fraction_in_liquid \n(%)')
     plt.ylabel('Depth (m)')
     plt.ylim(-0.1,1.1)
-    plt.xlim(10,15)
+    plt.xlim(-10,110)
     plt.gca().invert_yaxis()
     plt.grid()
-
     #plt.xlim(np.min(temperature_degree),np.max(temperature_degree))
     #ax3.set_yscale('log')
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0)) 
     # ax3.spines['top'].set_color('red')
     # ax3.xaxis.label.set_color('red')
     # ax3.tick_params(axis='x', colors='red')
+    ax2=ax3.twiny()
+    ax2.plot(brine_flow_xt_mtx_mmPday[:,i]*10,con_depth_m    ,'r1-')
+    plt.xlabel('Brine Velocity \n(($*10^-1$ mm/day)')
+    # plt.ylabel('high (m)')
+    plt.ylim(-0.1,1.1)
+    #plt.xlim(100,115)
+    plt.xlim(np.min(brine_flow_xt_mtx_mmPday)*10,np.max(brine_flow_xt_mtx_mmPday)*10)
+    #ax2.set_yscale('log')
+    #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    ax2.spines['top'].set_color('red')
+    ax2.xaxis.label.set_color('red')
+    ax2.tick_params(axis='x', 
+            colors='red')	 
+    ax2.invert_yaxis()
+    plt.grid()
 
     ax1=plt.subplot(442)
     ax1.plot(gas_pressure_xt_mtx_pa[1:,i]*kpaPpa, ele_depth_m  [1:],'k1-')
@@ -71,12 +85,12 @@ while i<lst.num_times:
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
     #ax1.set_yscale('log')
     ax2=ax1.twiny()
-    ax2.plot(gas_flow_xt_mtx_mmPday[:,i],con_depth_m    ,'r1-')
-    plt.xlabel('Gas Velocity \n(mm/day)')
+    ax2.plot(gas_flow_xt_mtx_mmPday[:,i]/10,con_depth_m    ,'r1-')
+    plt.xlabel('Gas Velocity \n($*10^1$ mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(-0.1,1.1)
     #plt.xlim(100,115)
-    plt.xlim(np.min(gas_flow_xt_mtx_mmPday),np.max(gas_flow_xt_mtx_mmPday))
+    plt.xlim(np.min(gas_flow_xt_mtx_mmPday)/10,np.max(gas_flow_xt_mtx_mmPday)/10)
     #ax2.set_yscale('log')
     #plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
     ax2.spines['top'].set_color('red')
@@ -87,7 +101,7 @@ while i<lst.num_times:
     plt.grid()
 
     ax3=plt.subplot(443)
-    ax3.plot(vapor_diff_flow_xt_mtx_mmPday[:,i]*10,con_depth_m    ,'k1-')
+    ax3.plot(brine_flow_xt_mtx_mmPday[:,i]*10,con_depth_m    ,'k1-')
     plt.xlabel('Vapor Diffusion \n($*10^-1$ mm/day)')
     # plt.ylabel('high (m)')
     plt.ylim(-0.1,1.1)
@@ -99,7 +113,7 @@ while i<lst.num_times:
                 labelright=False,
                 right=True
                 )
-    plt.xlim(np.nanmin(vapor_diff_flow_xt_mtx_mmPday)*10,np.nanmax(vapor_diff_flow_xt_mtx_mmPday)*10)			
+    plt.xlim(np.nanmin(brine_flow_xt_mtx_mmPday)*10,np.nanmax(brine_flow_xt_mtx_mmPday)*10)			
     ax4=ax3.twiny()	
     ax4.plot(liquid_flow_xt_mtx_mmPday[:,i]*10,con_depth_m    ,'r1-')
     plt.xlabel('Liquid Velocity \n($*10^-1$ mm/day)')
@@ -147,11 +161,11 @@ while i<lst.num_times:
 
     # #change of value over time
     ax7=plt.subplot(713)
-    ax7.plot(lst.times[:i]*dayPs,vapor_diff_flow_top_mmPday[:i]   ,'k1-',label='a1 to atm' )
+    ax7.plot(lst.times[:i]*dayPs,brine_flow_top_mmPday[:i]   ,'k1-',label='a1 to atm' )
     plt.ylabel('Vapor Diffusion\n(mm/day)')
     #plt.xlabel('Time (day)')
     #plt.ylim(-2.e3,1.e2)
-    #plt.ylim(np.min(vapor_diff_flow_top_mmPday),np.max(vapor_diff_flow_top_mmPday))
+    #plt.ylim(np.min(brine_flow_top_mmPday),np.max(brine_flow_top_mmPday))
     plt.xlim(0,np.max(lst.times)*dayPs)
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
     plt.legend(loc="upper right",prop={'size':10})
@@ -284,7 +298,7 @@ while i<lst.num_times:
     plt.rcParams.update({'font.size':12})
     #fig.tight_layout()
     plt.savefig('figure/output_'+str(i)+'.png',dpi=200) 
-    i+=1
+    i+=5
   
 
 # # plt.close('all')
