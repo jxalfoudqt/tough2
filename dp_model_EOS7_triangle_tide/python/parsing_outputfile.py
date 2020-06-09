@@ -14,20 +14,20 @@ T_kelven=273.15
 
 
 # #--- post-process the output ---------------------------
-dat.title = 'dp_model_flow_TIMBC'
+dat.title = 'dp_model_flow'
 lst       = t2listing(dat.title+'.listing')
 
 # #read element and connection
 connection_direction          = np.array([blk.direction for blk in dat.grid.connectionlist])
 element_coordinate            = np.array([j.centre for j in dat.grid.blocklist])                                       
-element_value_x               = element_coordinate[:,0]
-element_value_y               = element_coordinate[:,1]
-element_value_z               = element_coordinate[:,2]
+element_value_x               = element_coordinate[:-1,0]
+element_value_y               = element_coordinate[:-1,1]
+element_value_z               = element_coordinate[:-1,2]
   
 # #read element column
 #lst.element.column_name
 #['P', 'T', 'SG', 'SL', 'XBRINE(LIQ)', 'XAIRG', 'XAIRL', 'PCAP', 'DG', 'DL', 'POROSITY', 'LOG(K)']
-#gas_pressure_pa               = np.array([lst.history(('e',lst.element.row_name[i],'P'))[1] for i in range(lst.element.num_rows)])
+gas_pressure_pa               = np.array([lst.history(('e',lst.element.row_name[i],'P'))[1] for i in range(lst.element.num_rows)])
 #temperature_degree            = np.array([lst.history(('e',lst.element.row_name[i],'T'))[1] for i in range(lst.element.num_rows)])
 #gas_saturation                = np.array([lst.history(('e',lst.element.row_name[i],'SG'))[1] for i in range(lst.element.num_rows)])
 liq_saturation                = np.array([lst.history(('e',lst.element.row_name[i],'SL'))[1] for i in range(lst.element.num_rows)])

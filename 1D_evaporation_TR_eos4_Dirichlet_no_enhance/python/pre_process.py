@@ -43,7 +43,6 @@ inp.parameter.update(
      'print_level'    : -3,
      'texp'           : 1.8,	
      'timestep'       : [1.0],
-     'be'             : 2.334,
      'default_incons' : [101.3e3, 10.99, 13.0, None],
      'relative_error' : 1.e-6,
      'print_interval' : max_no_time_steps/10,
@@ -128,8 +127,7 @@ inp.grid.connectionlist.insert(0,con1)
 # #Set initial condition:
 for i in range(len(inp.grid.blocklist)-1):
     inp.incon[str(inp.grid.blocklist[i+1])] = \
-	    [None, [1000, 10.01, T_init_c]]
-#	    [None, [p_atm_pa+inp.grid.blocklist[i+1].centre[2]*(-1)*liquid_density_kgPm3*inp.parameter['gravity'], 10.01, T_init_c]]
+	    [None, [p_atm_pa+inp.grid.blocklist[i+1].centre[2]*(-1)*liquid_density_kgPm3*inp.parameter['gravity'], 10.01, T_init_c]]
 inp.incon['bdy01'] = [None, [p_atm_pa, 0.9999, T_init_c]]
 
 # # #set react:                                                            
