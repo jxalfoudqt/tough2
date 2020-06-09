@@ -11,4 +11,4 @@ dat.title = 'dp_model_flow'
 
 #os.system(" tough2 -to sam6_0.listing sam6 4")
 os.system(' tough2 -to '+dat.title+'.listing '+dat.title+' 7')
-#os.system(' tough2 -fi atmos.dat -to '+dat.title+'_0.listing '+dat.title+'_TIMBC 7')
+#os.system(' tough2 -fi atmos.dat -to '+dat.title+'.listing '+dat.title+' 7')

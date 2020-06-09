@@ -40,21 +40,27 @@ while i<lst.num_times:
     # fig.subplots_adjust(left=0.07, right=0.93, top=0.93, bottom=0.05)
     fig=plt.figure()
 
-    # brine_mass_fraction_in_liquid_grid=griddata((element_value_x,element_value_z),
-	                                            # brine_mass_fraction_in_liquid[:-2*nblks_z,i],(xi,zi),method='linear')
-    # liquid_flow_mmPday_x_2d=liquid_flow_mmPday_x[:-nblks_z*2,i].reshape(nblks_z,nblks_x-1)
-    # level_1=np.linspace(0,1,11)
-    # ax1 = plt.subplot(313)
-    # cs2 = plt.contourf(x1, z1, brine_mass_fraction_in_liquid_grid, level_1, cmap=plt.cm.jet)
-    # fig.colorbar(cs2, orientation='vertical',fraction=0.02,pad=0.05)
-    # cs1 = plt.quiver(xi_flux,zi_flux,liquid_flow_mmPday_x_2d[1:],liquid_flow_mmPday_z[:-(nblks_z-1),i].reshape(nblks_z-1,nblks_x-1),
-                    	# pivot='mid', width=0.002,scale=1/0.0001, color='k')
-    # qk = plt.quiverkey(cs1, 0.90, 1.1, 100, r'$100 \frac{mm}{day}$', labelpos='W',
-                    	# fontproperties={'weight': 'light','size': 'small'})
-    # plt.ylabel('y (m)')
-    # plt.xlabel('x (m) brine_mass_fraction_in_liquid')
-    # plt.ylim(-length_z,0)
-    # plt.xlim(0,length_x)
+    gas_pressure_pa_grid=griddata((element_value_x,element_value_z),
+	                                            gas_pressure_pa[:,i]/1000,(xi,zi),method='linear')
+    level_1=np.linspace(np.nanmin(gas_pressure_pa_grid),np.nanmax(gas_pressure_pa_grid),11)
+    ax1 = plt.subplot(311)
+    plt.plot(element_value_x,element_value_z,'k.')
+    cs2 = plt.contourf(x1, z1, gas_pressure_pa_grid, level_1, cmap=plt.cm.jet)
+    fig.colorbar(cs2, orientation='vertical',fraction=0.02,pad=0.05)
+    plt.ylabel('y (m)')
+    plt.xlabel('x (m) gas_pressure_Kpa')
+    plt.ylim(-length_z,0)
+    plt.xlim(0,length_x)
+
+    liq_saturation_grid=griddata((element_value_x,element_value_z),liq_saturation[:,i],(xi,zi),method='linear')
+    level_2=np.linspace(0,1.,11)
+    ax2=plt.subplot(312)
+    cs=plt.contourf(x1, z1, liq_saturation_grid, level_2, cmap=plt.cm.jet)
+    fig.colorbar(cs, orientation='vertical',fraction=0.02,pad=0.05)
+    plt.ylabel('y (m)')
+    plt.xlabel('x (m) liq_saturation')
+    plt.ylim(-length_z,0)
+    plt.xlim(0,length_x)
 	
     brine_mass_fraction_in_liquid_grid=griddata((element_value_x,element_value_z),
 	                                            brine_mass_fraction_in_liquid[:,i],(xi,zi),method='linear')
@@ -68,20 +74,10 @@ while i<lst.num_times:
     plt.ylim(-length_z,0)
     plt.xlim(0,length_x)
 
-    liq_saturation_grid=griddata((element_value_x,element_value_z),liq_saturation[:,i],(xi,zi),method='linear')
-    level_2=np.linspace(0,1.,11)
-    ax2=plt.subplot(312)
-    cs=plt.contourf(x1, z1, liq_saturation_grid, level_2, cmap=plt.cm.jet)
-    fig.colorbar(cs, orientation='vertical',fraction=0.02,pad=0.05)
-    plt.ylabel('y (m)')
-    plt.xlabel('x (m) liq_saturation')
-    plt.ylim(-length_z,0)
-    plt.xlim(0,length_x)
 
     fig.suptitle('time: %6.2e s' %lst.times[i])
     plt.rcParams.update({'font.size':10})
     fig.tight_layout()
     plt.savefig('figure/output_'+str(i+101)+'.png',dpi=300) 
-    i+=1
-
+    i+=2
 #plt.close('all')

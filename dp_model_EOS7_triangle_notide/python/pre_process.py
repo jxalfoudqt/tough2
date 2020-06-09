@@ -13,8 +13,8 @@ dayPs                       = 1./(3600*24)
 T_kelven                    = 273.15
 T_initial                   = 25.0
 p_atm_pa                    = 101.3e3
-simulation_time_s           = 50*3600*24
-max_no_time_steps           = 9000 
+simulation_time_s           = 40*3600*24
+max_no_time_steps           = 6000 
 
 
 # #--- set up the title ---------------------------------
@@ -43,6 +43,7 @@ dat.parameter.update(
      'print_level'    : 2,
      'texp'           : 1.8,	
      'timestep'       : [1.0],
+     'print_block'    : 'cb  9',
      'default_incons' : [p_atm_pa, 0, 10.99, T_initial, None],
      'relative_error' : 1.e-6,
      'print_interval' : max_no_time_steps/20,
@@ -99,7 +100,7 @@ r1.relative_permeability = {'type': 7, 'parameters': [0.627, Residual_saturation
 r1.capillarity           = {'type': 7, 'parameters': [0.627, Residual_saturation-1.e-5, 5.e-4, 1.e8, 1.]}
 dat.grid.add_rocktype(r1)
 
-r2 = rocktype('BOUND',
+r2 = rocktype('BOUN1',
            nad           = 2,
            porosity      = 0.99,
            density       = 2650.,
@@ -109,6 +110,18 @@ r2 = rocktype('BOUND',
 r2.relative_permeability = {'type': 1, 'parameters': [0.1, 0., 1., 0.1]}
 r2.capillarity           = {'type': 1, 'parameters': [0., 0., 1.0]}
 dat.grid.add_rocktype(r2)
+
+r3 = rocktype('BOUN2',
+           nad           = 2,
+           porosity      = 0.99,
+           density       = 2650.,
+           permeability  = [2.e-6, 2.e-6, 2.e-6],
+           conductivity  = 2.51,
+           specific_heat = 1.e5)
+r3.compressibility       = 1.e-10
+r3.relative_permeability = {'type': 1, 'parameters': [0.1, 0., 1., 0.1]}
+r3.capillarity           = {'type': 1, 'parameters': [0., 0., 1.0]}
+dat.grid.add_rocktype(r3)
 
 # #assign rocktype and parameter values:
 conarea = dx[0] * dy[0]
@@ -124,7 +137,7 @@ for i in range(nblks_z):
                 ahtx      = conarea,                            # area for heat exchange
                 centre    = np.array([0, dy[0]/2, -(length_z/nblks_z+i)/2])) # important for plotting
     dat.grid.add_block(b1)
-    con1 = t2connection([b1, dat.grid.blocklist[i*nblks_x],b1],
+    con1 = t2connection([b1, dat.grid.blocklist[i*nblks_x], b1],
                     distance  = [condist,0.5*dx[0]],
                     area      = conarea,
                     direction = 1,
@@ -149,7 +162,7 @@ for i in range(nblks_z):
 # for i in range(nblks_z-1):
     # dat.incon[str(dat.grid.blocklist[-(i+1+nblks_z-8)])] = [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-(i+1+nblks_z-8)].centre[2]), 0, 10.01, T_initial]]
 
-b2 = t2block('zzz'+str(nblks_z+1), bvol, r2,
+b2 = t2block('zzz'+str(nblks_z+1), bvol, r3,
             ahtx      = conarea,                          
             centre    = np.array([length_x,dy[0]/2,-(length_z/nblks_z+8)/2]))
 dat.grid.add_block(b2)
@@ -160,10 +173,11 @@ con2 = t2connection([dat.grid.blocklist[nblks_x-1+8*nblks_x], b2],
             dircos    = 0)
 dat.grid.add_connection(con2)
 
+
 # #Set initial condition:
 mean_water_level_m=3
 dat.incon[str(dat.grid.blocklist[-1])] = \
-         [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-1].centre[2]+mean_water_level_m), 1, 10.01, T_initial]]
+         [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-1].centre[2]+mean_water_level_m), 1, 0, T_initial]]
 for i in range(nblks_z-1):
     dat.incon[str(dat.grid.blocklist[-(i+2)])] = \
 	         [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-(i+2)].centre[2]), 0, 10.01, T_initial]]
@@ -178,31 +192,18 @@ while j<9:
     j+=1
 
 # # #add generator:
-# paremeter_mvPrt        = 29*1.e50/R_value/(T_initial+T_kelven)
 # time_variation_s       = np.arange(10*24*3600,dat.parameter['tstop'],(dat.parameter['tstop']-10*24*3600)/100.)
-# depth_variation_m      = (np.cos(np.linspace(0,20*np.pi,len(time_variation_s)))+1)*0.5
-
-# ###########---gas injection---
-# # flow_rate_kgPs         = liquid_density_kgPm3*dat.parameter['gravity']*depth_variation_m*paremeter_mvPrt
-# # gen = t2generator(name = 'INF 1', block = 'zzz13', ltab=len(time_variation_s),
-                 # # rate=flow_rate_kgPs, time= time_variation_s, type = 'COM3')
-				 
-# ###########---water injection---				 
-# flow_rate_kgPs         = liquid_density_kgPm3*depth_variation_m*1.e50
+# pressure_zero          = dat.incon[str(dat.grid.blocklist[-1])][1][0]
+# pressure_pa            = pressure_zero*(1+(np.sin(np.linspace(0,20*np.pi,len(time_variation_s)))+1)*0.1)
+# flow_rate_kgPs         = liquid_density_kgPm3*bvol*r3.porosity*r3.compressibility*pressure_zero*0.1*np.cos(np.linspace(0,20*np.pi,len(time_variation_s)))
 # gen = t2generator(name = 'INF 1', block = 'zzz13', ltab=len(time_variation_s),
-                 # rate=flow_rate_kgPs, time= time_variation_s, type = 'COM1')		
-				 
+                  # rate=flow_rate_kgPs, time= time_variation_s, type = 'COM1')		
 # dat.add_generator(gen)
-
-# # flow_rate_mmPday=50
-# # flow_rate_kgPs=flow_rate_mmPday*conarea*liquid_density_kgPm3*mPmm*dayPs
-# # gen = t2generator(name = 'INF 1', block = ' cb 5', gx = flow_rate_kgPs, type = 'COM1')
-# # dat.add_generator(gen)
 
 # # #set react:                                                            
 # dat.add_react(mopr=[None,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])                    # only run tough2 no toughreact
 
 
 # #--- write TOUGH2 input file ------------------------------------	
-dat.write(dat.title)
-print("file " + dat.title +" generated\n")
+dat.write(dat.title[:19])
+print("file generated\n")

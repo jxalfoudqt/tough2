@@ -20,9 +20,9 @@ lst       = t2listing(dat.title+'.listing')
 # #read element and connection
 connection_direction          = np.array([blk.direction for blk in dat.grid.connectionlist])
 element_coordinate            = np.array([j.centre for j in dat.grid.blocklist])                                       
-element_value_x               = element_coordinate[:-1,0]
-element_value_y               = element_coordinate[:-1,1]
-element_value_z               = element_coordinate[:-1,2]
+element_value_x               = element_coordinate[:,0]
+element_value_y               = element_coordinate[:,1]
+element_value_z               = element_coordinate[:,2]
   
 # #read element column
 #lst.element.column_name

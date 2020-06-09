@@ -121,7 +121,7 @@ r3 = rocktype('BOUN2',
 r3.compressibility       = 1.e-10
 r3.relative_permeability = {'type': 1, 'parameters': [0.1, 0., 1., 0.1]}
 r3.capillarity           = {'type': 1, 'parameters': [0., 0., 1.0]}
-dat.grid.add_rocktype(r2)
+dat.grid.add_rocktype(r3)
 
 # #assign rocktype and parameter values:
 conarea = dx[0] * dy[0]
@@ -191,19 +191,19 @@ while j<9:
         i+=1
     j+=1
 
-# # #add generator:
-# time_variation_s       = np.arange(10*24*3600,dat.parameter['tstop'],(dat.parameter['tstop']-10*24*3600)/100.)
-# pressure_zero          = dat.incon[str(dat.grid.blocklist[-1])][1][0]
-# pressure_pa            = pressure_zero*(1+(np.sin(np.linspace(0,20*np.pi,len(time_variation_s)))+1)*0.1)
-# flow_rate_kgPs         = liquid_density_kgPm3*bvol*r3.porosity*r3.compressibility*pressure_zero*0.1*np.cos(np.linspace(0,20*np.pi,len(time_variation_s)))
-# gen = t2generator(name = 'INF 1', block = 'zzz13', ltab=len(time_variation_s),
-                  # rate=flow_rate_kgPs, time= time_variation_s, type = 'COM1')		
-# dat.add_generator(gen)
+# #add generator:
+time_variation_s       = np.arange(10*24*3600,dat.parameter['tstop'],(dat.parameter['tstop']-10*24*3600)/100.)
+pressure_zero          = dat.incon[str(dat.grid.blocklist[-1])][1][0]
+pressure_pa            = pressure_zero*(1+(np.sin(np.linspace(0,20*np.pi,len(time_variation_s)))+1)*0.1)
+flow_rate_kgPs         = liquid_density_kgPm3*bvol*r3.porosity*r3.compressibility*pressure_zero*0.1*np.cos(np.linspace(0,20*np.pi,len(time_variation_s)))
+gen = t2generator(name = 'INF 1', block = 'zzz13', ltab=len(time_variation_s),
+                  rate=flow_rate_kgPs, time= time_variation_s, type = 'COM1')		
+dat.add_generator(gen)
 
 # # #set react:                                                            
 # dat.add_react(mopr=[None,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1])                    # only run tough2 no toughreact
 
 
 # #--- write TOUGH2 input file ------------------------------------	
-dat.write(dat.title[:19])
+dat.write(dat.title)
 print("file generated\n")
