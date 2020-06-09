@@ -17,8 +17,8 @@ sPday                  = 3600*24.
 T_init_c               = 13.0
 T_kelven               = 273.15
 p_atm_pa               = 101.3e3
-simulation_time_s      = 100*3600*24
-max_no_time_steps      = 1000 
+simulation_time_s      = 600*3600*24
+max_no_time_steps      = 9000 
 
 
 # #--- set up the title ---------------------------------
@@ -46,7 +46,7 @@ inp.parameter.update(
      'be'             : 2.334,
      'default_incons' : [101.3e3, 10.99, 13.0, None],
      'relative_error' : 1.e-6,
-     'print_interval' : max_no_time_steps/max_no_time_steps,
+     'print_interval' : max_no_time_steps/10,
      'max_timestep'   : simulation_time_s/max_no_time_steps  # the maximum length of time step in second
      })
 # #Set MOPs:

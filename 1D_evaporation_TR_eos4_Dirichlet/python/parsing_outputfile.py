@@ -53,7 +53,7 @@ vapor_diff_flow_xt_mtx_kgPs    = -np.array([lst.history(('c',i,'VAPDIF'))[1] for
 liquid_flow_xt_mtx_kgPs        = -np.array([lst.history(('c',i,'FLO(LIQ.)'))[1] for i in lst.connection.row_name])
                               
 # #unit change                
-gas_flow_xt_mtx_mmPday         = gas_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(gas_density_xt_mtx_kgPm3[1:]+gas_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs 
+gas_flow_xt_mtx_mmPday         = gas_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs 
 vapor_diff_flow_xt_mtx_mmPday  = vapor_diff_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
 liquid_flow_xt_mtx_mmPday      = liquid_flow_xt_mtx_kgPs/dat.grid.connectionlist[0].area/(liq_density_xt_mtx_kgPm3[1:]+liq_density_xt_mtx_kgPm3[:-1])/2/mPmm/dayPs  
                               
@@ -77,8 +77,17 @@ gas_flow_top_mmPday           = gas_flow_xt_mtx_mmPday[0]
 vapor_adv_top_mmPday          = vapor_adv_xt_mtx_mmPday[0]
 vapor_diff_flow_top_mmPday    = vapor_diff_flow_xt_mtx_mmPday[0]
                  
-water_flow_top_mmPday       = liquid_flow_top_mmPday+vapor_adv_top_mmPday+vapor_diff_flow_top_mmPday
-cumsum_water_flow_top_mm    = np.cumsum(water_flow_top_mmPday*np.insert(np.diff(lst.times),0,lst.times[0])*dayPs)
+water_flow_top_mmPday         = liquid_flow_top_mmPday+vapor_adv_top_mmPday+vapor_diff_flow_top_mmPday
+cumsum_water_flow_top_mm      = np.cumsum(water_flow_top_mmPday*np.insert(np.diff(lst.times),0,lst.times[0])*dayPs)
+
+liquid_flow_A2toA1_mmPday     = liquid_flow_xt_mtx_mmPday[1]
+gas_flow_A2toA1_mmPday        = gas_flow_xt_mtx_mmPday[1]
+vapor_adv_A2toA1_mmPday       = vapor_adv_xt_mtx_mmPday[1]
+vapor_diff_flow_A2toA1_mmPday = vapor_diff_flow_xt_mtx_mmPday[1]
+liquid_flow_A3toA2_mmPday     = liquid_flow_xt_mtx_mmPday[2]
+gas_flow_A3toA2_mmPday        = gas_flow_xt_mtx_mmPday[2]
+vapor_adv_A3toA2_mmPday       = vapor_adv_xt_mtx_mmPday[2]
+vapor_diff_flow_A3toA2_mmPday = vapor_diff_flow_xt_mtx_mmPday[2]
 
 # # #read generation column 
 # #lst.generation.column_name

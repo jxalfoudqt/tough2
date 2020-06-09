@@ -148,6 +148,8 @@ while i<lst.num_times:
     # #change of value over time
     ax7=plt.subplot(713)
     ax7.plot(lst.times[:i]*dayPs,vapor_diff_flow_top_mmPday[:i]   ,'k1-',label='a1 to atm' )
+    ax7.plot(lst.times[:i]*dayPs,vapor_diff_flow_A2toA1_mmPday[:i],'r1-',label='a2 to a1' )
+    ax7.plot(lst.times[:i]*dayPs,vapor_diff_flow_A3toA2_mmPday[:i],'g1-',label='a3 to a2' )
     plt.ylabel('Vapor Diffusion\n(mm/day)')
     #plt.xlabel('Time (day)')
     #plt.ylim(-2.e3,1.e2)
@@ -176,6 +178,8 @@ while i<lst.num_times:
 	
     ax7=plt.subplot(714)
     ax7.plot(lst.times[:i]*dayPs,liquid_flow_top_mmPday[:i],'k1-',label='a1 to atm')
+    ax7.plot(lst.times[:i]*dayPs,liquid_flow_A2toA1_mmPday[:i],'r1-',label='a2 to a1' )
+    ax7.plot(lst.times[:i]*dayPs,liquid_flow_A3toA2_mmPday[:i],'g1-',label='a3 to a2' )
     plt.ylabel('Liquid Vel.\n (mm/day)')
     #plt.xlabel('Time (day)')
     #plt.ylim(-0.1e-2,1.4)
@@ -206,6 +210,8 @@ while i<lst.num_times:
     ax7=plt.subplot(715)
     #ax7.plot(lst.times[:i]*dayPs,vapor_diff_flow_second_mmPday[:i],'k1-')
     ax7.plot(lst.times[:i]*dayPs,vapor_adv_top_mmPday[:i]   ,'k1-',label='a1 to atm')
+    ax7.plot(lst.times[:i]*dayPs,vapor_adv_A2toA1_mmPday[:i],'r1-',label='a2 to a1' )
+    ax7.plot(lst.times[:i]*dayPs,vapor_adv_A3toA2_mmPday[:i],'g1-',label='a3 to a2' )
     plt.ylabel('Vapor Adv\n (mm/day)')
     #plt.xlabel('Time (day)')
     #plt.ylim(0.08,0.13)
@@ -283,7 +289,7 @@ while i<lst.num_times:
     fig.suptitle('time: %6.2e days' %(lst.times[i]*dayPs))
     plt.rcParams.update({'font.size':12})
     #fig.tight_layout()
-    plt.savefig('figure/output_'+str(i)+'.png',dpi=200) 
+    plt.savefig('figure/output_'+str(100+i)+'.png',dpi=200) 
     i+=1
   
 
