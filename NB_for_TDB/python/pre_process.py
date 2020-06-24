@@ -136,7 +136,7 @@ dat.grid.add_connection(con2)
 
 # #Set initial condition:
 dat.incon[str(dat.grid.blocklist[-1])] = \
-         [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-1].centre[2]), 0, 0, T_initial]]
+         [None, [p_atm_pa-liquid_density_kgPm3*dat.parameter['gravity']*(dat.grid.blocklist[-1].centre[2]-3), 0, 0, T_initial]]
 
 # #add generator:
 max_bdy_point_numbers  = 10000.
