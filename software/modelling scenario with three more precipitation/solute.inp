@@ -1,0 +1,41 @@
+# Title
+'SGD_TR_EOS1_try'
+# options for reactive chemical transport: ISPIA,INIBOUND,ISOLVC,ngamm,NGAS1,ichdump,kcpl,Ico2h2o,iTDS_REACT 
+    2    0    5    0    1    0    2    0    0 
+# constraints for reactive chemical transport(4e10.4): sl1min, rcour, stimax, cnfact
+   1.00e-2       0.9       4.0       1.0       
+# Read input and output file names:
+therakin10.dat                 ! thermodynamic database
+iter.dat                       ! iteration information
+aqui_con.dat                   ! aqueous concentrations in tecplot form
+aqui_min.dat                   ! mineral data  in tecplot form
+aqui_gas.dat                   ! gas data  in tecplot form
+aqui_tim.dat                   ! concentrations at specific elements over time
+# Weighting parameters
+       1.0       1.0     0.d-07   0.E-05           ! itime wupc,dffun,dffung
+# data to convergence criteria:
+    1 0.100E-03  200 0.100E-03   30 0.100E-05  0.00E-05  0.00E-05    !  ........ TOLDC,TOLDR 
+# writing control variables: NWTI NWNOD NWCOM NWMIN NWAQ NWADS NWEXC iconflag(=1:mol/l) minflag(=1:Vf)
+    5    0    5    4    3    0    0    1    1   
+# pointer of nodes for writing in time:
+
+# pointer of components for writing:
+    1    2    3    4    5    
+# pointer of minerals for writing:
+    1    2    3    4   
+# Individual aqueous species for which to output concentrations in time and plot files:
+    6    7    8 
+# Adsorption species for which to output concentrations in time and plot files:
+
+# Exchange species for which to output concentrations in time and plot files:
+
+# default values of chemical zone codes for nodes:
+    1    0    1    1    0    0    1    0
+# chemical zone codes for node (initial watrer;boundary water;mineral;gas;adsorption;ion exchange;porosity-permeability;linear adsorption)
+sea 1   19    1    2    0    0    0    0    0    0    0
+  a 1   19   24    0    1    0    0    0    0    0    0
+
+# nodes connected to gas supply (i.e.) atmosphere
+
+# this 'end' is needed here
+end 

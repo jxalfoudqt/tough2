@@ -1,0 +1,82 @@
+# Title
+'SGD_model'
+# '-----------------------------------------------------------------------------'
+# 'DEFINITION OF THE GEOCHEMICAL SYSTEM'
+# 'PRIMARY AQUEOUS SPECIES'
+'h+'       0
+'h2o'      0
+'o2(aq)'   0
+'fe+2'     0
+'*'
+# 'AQUEOUS KINETICS'
+'*'
+# 'AQUEOUS COMPLEXES'
+'fe+3' 
+'*'
+# 'MINERALS'         ! equilibrium mineral goes first
+'fe(oh)3(s)'        0      0     0    0
+0.0   0.    000.00
+'*'               
+# 'GASES' 
+'*'
+# 'SURFACE COMPLEXES'
+'*'
+# 'species with Kd and decay    decay constant(1/s)'
+'*'                    
+# 'EXCHANGEABLE CATIONS'    
+'*'
+# '----------------------------------------------------------------------------'
+# 'INITIAL AND BOUDARY WATER TYPES'
+2   1        !niwtype, nbwtype = number of initial and boundary waters
+# Index  Speciation T(C)  P(bar)
+1     25.0   1.0                         
+#'       icon        guess         ctot         ' 
+'h+'       3       1.000e-7     1.000e-7    '    '    0.       
+'h2o'      1       1.000e+0     1.000e+0    '    '    0.            ! raw water
+'o2(aq)'   1       1.000e-10    1.000e-10   '    '    0.         
+'fe+2'     1       1.000e-10    1.000e-10   '    '    0. 
+'*'  
+# Index  Speciation T(C)  P(bar)
+2     25.0   1.0       
+#'       icon        guess         ctot         ' 
+'h+'       3       1.000e-8     1.000e-8    '    '    0.       
+'h2o'      1       1.000e+0     1.000e+0    '    '    0.            ! sea water
+'o2(aq)'   1       2.000e-4     2.000e-4    '    '    0.         
+'fe+2'     1       1.000e-10    1.000e-10   '    '    0. 
+'*'  
+# Index  Speciation T(C)  P(bar)
+1     25.0   1.0                         
+#'       icon        guess         ctot         ' 
+'h+'       3       1.000e-5     1.000e-5    '    '    0.       
+'h2o'      1       1.000e+0     1.000e+0    '    '    0.            ! fresh water
+'o2(aq)'   1       1.000e-10    1.000e-10   '    '    0.         
+'fe+2'     1       0.500e-4     0.500e-4    '    '    0. 
+'*'  
+# '----------------------------------------------------------------------------'
+#  'INITIAL MINERAL ZONES'
+1                                       !nmtype= number of mineral zones 
+1					!imtype   
+#'mineral         vol.frac.'    
+'fe(oh)3(s)'        1.e-4     0
+'*'                     
+# '----------------------------------------------------------------------------'
+# 'INITIAL gas ZONES'
+'*'  
+# '----------------------------------------------------------------------------'
+# 'Permeability-Porosity Zones'
+ 1
+ 1
+#'perm law   a-par   b-par tcwM3'
+    1    0.0000E+00    0.0000E+00
+'*'     
+# '----------------------------------------------------------------------------'
+# 'INITIAL SURFACE ADSORPTION ZONES'
+'*'                       
+# '---------------------------------------if Sden=0 Kd store retardation factor'
+# 'INITIAL LINEAR EQUILIBRIUM Kd ZONE
+'*'
+# '---------------------------------------if Sden=0 Kd store retardation factor'
+# 'INITIAL ZONES OF CATION EXCHANGE'
+'*'
+# '----------------------------------------------------------------------------'
+# 'end'
